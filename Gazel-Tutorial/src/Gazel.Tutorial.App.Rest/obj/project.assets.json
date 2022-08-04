@@ -7122,11 +7122,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\USER\\OneDrive\\Belgeler\\GitHub\\Gazel-Tutorial\\src\\Gazel.Tutorial.App.Rest\\Gazel.Tutorial.App.Rest.csproj",
+      "projectUniqueName": "C:\\Users\\USER\\OneDrive\\Belgeler\\GitHub\\learning-gazel\\Gazel-Tutorial\\src\\Gazel.Tutorial.App.Rest\\Gazel.Tutorial.App.Rest.csproj",
       "projectName": "Gazel.Tutorial.App.Rest",
-      "projectPath": "C:\\Users\\USER\\OneDrive\\Belgeler\\GitHub\\Gazel-Tutorial\\src\\Gazel.Tutorial.App.Rest\\Gazel.Tutorial.App.Rest.csproj",
+      "projectPath": "C:\\Users\\USER\\OneDrive\\Belgeler\\GitHub\\learning-gazel\\Gazel-Tutorial\\src\\Gazel.Tutorial.App.Rest\\Gazel.Tutorial.App.Rest.csproj",
       "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\USER\\OneDrive\\Belgeler\\GitHub\\Gazel-Tutorial\\src\\Gazel.Tutorial.App.Rest\\obj\\",
+      "outputPath": "C:\\Users\\USER\\OneDrive\\Belgeler\\GitHub\\learning-gazel\\Gazel-Tutorial\\src\\Gazel.Tutorial.App.Rest\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",

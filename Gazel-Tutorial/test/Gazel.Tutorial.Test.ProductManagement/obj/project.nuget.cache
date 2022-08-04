@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "BSdkRM9I0Dcdv5yq4lhClMk+biooRoP3AKhp7S2jZLAM85eg3gVjZNCQApKkPX8jv5W/EMAmfrJbDg9VKYbkdw==",
+  "dgSpecHash": "biIvjqiDlSYM6nEBcbob7d66lxwYZWiCmGf3fagZ0Bt11jppQtA4KNndvJ7OhE4cesQjhY30z3JJYdiej3Tmwg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\USER\\OneDrive\\Belgeler\\GitHub\\Gazel-Tutorial\\test\\Gazel.Tutorial.Test.ProductManagement\\Gazel.Tutorial.Test.ProductManagement.csproj",
+  "projectFilePath": "C:\\Users\\USER\\OneDrive\\Belgeler\\GitHub\\learning-gazel\\Gazel-Tutorial\\test\\Gazel.Tutorial.Test.ProductManagement\\Gazel.Tutorial.Test.ProductManagement.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\USER\\.nuget\\packages\\antlr3.runtime\\3.5.1\\antlr3.runtime.3.5.1.nupkg.sha512",
     "C:\\Users\\USER\\.nuget\\packages\\castle.core\\4.4.1\\castle.core.4.4.1.nupkg.sha512",

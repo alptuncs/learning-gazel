@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "kOmbfICVPRXnpMR2Hq3TuDl50AFw41ye7EYXkDzLndIEr+8KrLgF8/ANfQFbqua13NACgbcnXpok+vW27n572Q==",
+  "dgSpecHash": "hBLuGPh9QBtwqj+/IqiybuR8e9jnq8+250Z1z/O79PbLfKJpVfCuiUlVZIwvnEjm9DIFOapx62otAXRP7PRhgw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\USER\\OneDrive\\Belgeler\\GitHub\\Gazel-Tutorial\\src\\Gazel.Tutorial.Module.ProductManagement\\Gazel.Tutorial.Module.ProductManagement.csproj",
+  "projectFilePath": "C:\\Users\\USER\\OneDrive\\Belgeler\\GitHub\\learning-gazel\\Gazel-Tutorial\\src\\Gazel.Tutorial.Module.ProductManagement\\Gazel.Tutorial.Module.ProductManagement.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\USER\\.nuget\\packages\\gazel\\5.2.0\\gazel.5.2.0.nupkg.sha512",
     "C:\\Users\\USER\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",

@@ -1,0 +1,6 @@
+C:\Users\USER\OneDrive\Belgeler\GitHub\learning-gazel\Gazel-Tutorial\test\Gazel.Tutorial.Test.ProductManagement\bin\Debug\net6.0\CoverletSourceRootsMapping
+C:\Users\USER\OneDrive\Belgeler\GitHub\learning-gazel\Gazel-Tutorial\test\Gazel.Tutorial.Test.ProductManagement\obj\Debug\net6.0\Gazel.Tutorial.Test.ProductManagement.csproj.AssemblyReference.cache
+C:\Users\USER\OneDrive\Belgeler\GitHub\learning-gazel\Gazel-Tutorial\test\Gazel.Tutorial.Test.ProductManagement\obj\Debug\net6.0\Gazel.Tutorial.Test.ProductManagement.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\USER\OneDrive\Belgeler\GitHub\learning-gazel\Gazel-Tutorial\test\Gazel.Tutorial.Test.ProductManagement\obj\Debug\net6.0\Gazel.Tutorial.Test.ProductManagement.AssemblyInfoInputs.cache
+C:\Users\USER\OneDrive\Belgeler\GitHub\learning-gazel\Gazel-Tutorial\test\Gazel.Tutorial.Test.ProductManagement\obj\Debug\net6.0\Gazel.Tutorial.Test.ProductManagement.AssemblyInfo.cs
+C:\Users\USER\OneDrive\Belgeler\GitHub\learning-gazel\Gazel-Tutorial\test\Gazel.Tutorial.Test.ProductManagement\obj\Debug\net6.0\Gazel.Tutorial.Test.ProductManagement.csproj.CoreCompileInputs.cache

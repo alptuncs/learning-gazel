@@ -1,19 +1,26 @@
-# ignore All files in all directories named .vs
+# ignore All directories named .vs
 Gazel-Tutorial/.vs/
 
-# ignore bin and obj folders in ProductManagement Test folder
+# ignore obj folder in ProductManagement Test
 Gazel-Tutorial/test/Gazel.Tutorial.Test.ProductManagement/obj/
+
+# ignore bin folder in ProductManagement Test
 Gazel-Tutorial/test/Gazel.Tutorial.Test.ProductManagement/bin/
 
-# ignore bin and obj folders in App Rest folder
+# ignore bin folder in App Rest
 Gazel-Tutorial/src/Gazel.Tutorial.App.Rest/bin/
+
+# ignore obj folder in App Rest
 Gazel-Tutorial/src/Gazel.Tutorial.App.Rest/obj/
 
-# ignore bin and obj folders in App Service folder
+# ignore bin folder in App Service
 Gazel-Tutorial/src/Gazel.Tutorial.App.Service/bin/
+
+## ignore obj folder in App Service
 Gazel-Tutorial/src/Gazel.Tutorial.App.Service/obj/
 
-# ignore bin and obj folders in App ProductManagement folder
+# ignore bin folder in App ProductManagement
 Gazel-Tutorial/src/Gazel.Tutorial.Module.ProductManagement/bin/
-Gazel-Tutorial/src/Gazel.Tutorial.Module.ProductManagement/obj/
 
+# ignore obj folder in App ProductManagement
+Gazel-Tutorial/src/Gazel.Tutorial.Module.ProductManagement/obj/

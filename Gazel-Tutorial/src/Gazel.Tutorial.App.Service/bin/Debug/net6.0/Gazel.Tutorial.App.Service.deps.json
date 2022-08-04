@@ -8,7 +8,8 @@
     ".NETCoreApp,Version=v6.0": {
       "Gazel.Tutorial.App.Service/1.0.0": {
         "dependencies": {
-          "Gazel.Configuration": "5.2.0"
+          "Gazel.Configuration": "5.2.0",
+          "Gazel.Tutorial.Module.ProductManagement": "1.0.0"
         },
         "runtime": {
           "Gazel.Tutorial.App.Service.dll": {}
@@ -1387,6 +1388,14 @@
           "System.Threading": "4.3.0",
           "System.Xml.ReaderWriter": "4.3.0"
         }
+      },
+      "Gazel.Tutorial.Module.ProductManagement/1.0.0": {
+        "dependencies": {
+          "Gazel": "5.2.0"
+        },
+        "runtime": {
+          "Gazel.Tutorial.Module.ProductManagement.dll": {}
+        }
       }
     }
   },
@@ -2347,6 +2356,11 @@
       "sha512": "sha512-lJ8AxvkX7GQxpC6GFCeBj8ThYVyQczx2+f/cWHJU8tjS7YfI6Cv6bon70jVEgs2CiFbmmM8b9j1oZVx0dSI2Ww==",
       "path": "system.xml.xmldocument/4.3.0",
       "hashPath": "system.xml.xmldocument.4.3.0.nupkg.sha512"
+    },
+    "Gazel.Tutorial.Module.ProductManagement/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

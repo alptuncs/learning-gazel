@@ -13,6 +13,7 @@
         void UpdateProductName(string productName);
         void UpdateProductPrice(float price);
         void UpdateProductStock(int stock);
+        void RemoveProduct()
     }
 
     public interface IProductsService

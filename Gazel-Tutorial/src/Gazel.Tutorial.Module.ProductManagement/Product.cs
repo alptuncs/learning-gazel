@@ -1,0 +1,101 @@
+﻿using Gazel;
+using Gazel.DataAccess;
+using Gazel.Tutorial.Module.ProductManagement.Service;
+
+namespace Gazel.Tutorial.Module.ProductManagement
+{
+    public class Product : IProductInfo, IProductService
+    {
+        private IRepository<Product> repository;
+
+        protected Product() { }
+
+        public Product(IRepository<Product> repository)
+        {
+            this.repository = repository;
+        }
+
+        public virtual int Id { get; protected set; }
+        public virtual string ProductName { get; protected set; }
+        public virtual float Price { get; protected set; }
+        public virtual int Stock { get; protected set; }
+
+        protected internal virtual Product With(string name, float price, int stock)
+        {
+            ProductName = name;
+            Price = price;
+            Stock = stock;
+
+            repository.Insert(this);
+
+            return this;
+        }
+
+        public virtual void UpdateProductName(string name)
+        {
+            ProductName = name;
+        }
+
+        public virtual void UpdateProductPrice(float price)
+        {
+            Price = price;
+        }
+
+        public virtual void UpdateProductStock(int stock)
+        {
+            Stock = stock;
+        }
+
+        public virtual void RemoveProduct()
+        {
+            repository.Delete(this);
+        }
+    }
+
+    public class Products : Query<Product>, IProductsService
+    {
+        public Products(IModuleContext context) : base(context) { }
+
+        public List<Product> ByName(string name)
+        {
+            return By(t => t.ProductName == name);
+        }
+
+        public List<Product> ByPositiveStock()
+        {
+            return By(t => t.Stock > 0);
+        }
+
+        public List<Product> ByPriceHigherThan(float lowerBound)
+        {
+            return By(t => t.Price >= lowerBound);
+        }
+
+        public List<Product> ByPriceLowerThan(float upperBound)
+        {
+            return By(t => t.Price <= upperBound);
+        }
+
+        public List<Product> ByPriceRange(float lowerBound, float upperBound)
+        {
+            return ByPriceHigherThan(lowerBound).Intersect(ByPriceLowerThan(upperBound)).ToList();
+        }
+
+        public Product ById(int productId)
+        {
+            return SingleBy(t => t.Id == productId);
+        }
+
+        IProductInfo IProductsService.GetProduct(int productId) =>
+        SingleById(productId);
+
+        List<IProductInfo> IProductsService.GetProductsWithPositiveStock() =>
+            ByPositiveStock().Cast<IProductInfo>().ToList();
+
+        List<IProductInfo> IProductsService.GetProductsWithinPriceRange(float lowerBound, float upperBound) =>
+            ByPriceRange(lowerBound, upperBound).Cast<IProductInfo>().ToList();
+
+        List<IProductInfo> IProductsService.GetProductsWithName(string name) =>
+            ByName(name).Cast<IProductInfo>().ToList();
+    }
+}

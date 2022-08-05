@@ -21,5 +21,11 @@ namespace Gazel.Tutorial.Module.ProductManagement
         {
             context.Query<Products>().ById(productId).RemoveProduct();
         }
+
+        public CartItem CreateCartItem(int productId, int cartId, int amount)
+        {
+            var product = context.Query<Products>().ById(productId);
+            return context.New<CartItem>().With(product, cartId, amount);
+        }
     }
 }

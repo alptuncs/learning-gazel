@@ -4,5 +4,6 @@
     {
         Product CreateProduct(string name, float price, int stock);
         void DeleteProduct(int productId);
+        CartItem CreateCartItem(int productId, int cartId, int amount);
     }
 }

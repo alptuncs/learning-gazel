@@ -17,15 +17,53 @@ namespace Gazel.Tutorial.Module.ProductManagement
             return context.New<Product>().With(name, price, stock);
         }
 
-        public void DeleteProduct(int productId)
+        public void DeleteProduct(Product product)
         {
-            context.Query<Products>().ById(productId).RemoveProduct();
+            context.Query<CartItems>().ByProduct(product).ForEach(t => t.Cart.RemoveFromCart(product));
+
+            product.RemoveProduct();
         }
 
-        public CartItem CreateCartItem(int productId, int cartId, int amount)
+        public void UpdateProduct(Product product, string name, float price, int stock)
         {
-            var product = context.Query<Products>().ById(productId);
-            return context.New<CartItem>().With(product, cartId, amount);
+            product.UpdateProduct(name, price, stock);
+        }
+        public CartItem CreateCartItem(Product product, Cart cart, int amount)
+        {
+            return context.New<CartItem>().With(product, cart, amount);
+        }
+
+        public void DeleteCartItem(CartItem cartItem)
+        {
+            cartItem.RemoveCartItem();
+        }
+
+        public Cart CreateCart(string userName)
+        {
+            return context.New<Cart>().With(userName);
+        }
+
+        public void AddProductToCart(Product product, int amount, Cart cart)
+        {
+            if (amount > product.Stock) throw new Exception($"There are {product.Stock} amount of products in stock, can't add {amount} amount to your cart");
+
+            cart.AddToCart(product, amount);
+        }
+
+        public void RemoveProductFromCart(Product product, Cart cart)
+        {
+            cart.RemoveFromCart(product);
+        }
+
+        public void RemoveAllProductsFromCart(Cart cart)
+        {
+            cart.EmptyCart();
+        }
+
+        public void DeleteCart(Cart cart)
+        {
+            RemoveAllProductsFromCart(cart);
+            cart.DeleteCart();
         }
     }
 }

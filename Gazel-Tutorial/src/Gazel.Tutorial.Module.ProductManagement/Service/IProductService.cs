@@ -10,9 +10,6 @@
 
     public interface IProductService
     {
-        void UpdateProductName(string productName);
-        void UpdateProductPrice(float price);
-        void UpdateProductStock(int stock);
         void RemoveProduct();
     }
 

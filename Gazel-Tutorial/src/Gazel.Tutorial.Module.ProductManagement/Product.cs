@@ -4,6 +4,7 @@ using Gazel.Tutorial.Module.ProductManagement.Service;
 
 namespace Gazel.Tutorial.Module.ProductManagement
 {
+
     public class Product : IProductInfo, IProductService
     {
         private IRepository<Product> repository;
@@ -30,19 +31,14 @@ namespace Gazel.Tutorial.Module.ProductManagement
 
             return this;
         }
-
-        public virtual void UpdateProductName(string name)
+        public virtual void UpdateProduct(string name = null, float price = default(float), int stock = default(int))
         {
+            if (name.IsNullOrWhiteSpace()) name = ProductName;
+            if (price.IsDefault()) price = Price;
+            if (stock.IsDefault()) stock = Stock;
+
             ProductName = name;
-        }
-
-        public virtual void UpdateProductPrice(float price)
-        {
             Price = price;
-        }
-
-        public virtual void UpdateProductStock(int stock)
-        {
             Stock = stock;
         }
 
@@ -81,7 +77,7 @@ namespace Gazel.Tutorial.Module.ProductManagement
             return ByPriceHigherThan(lowerBound).Intersect(ByPriceLowerThan(upperBound)).ToList();
         }
 
-        public Product ById(int productId)
+        public Product SingleById(int productId)
         {
             return SingleBy(t => t.Id == productId);
         }

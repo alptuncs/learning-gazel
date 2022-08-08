@@ -15,11 +15,9 @@ namespace Inventiv.ToDo.Test.UnitTest.TaskManagement
 
             BeginTest();
 
-            var expected = CreateCartItem(product, cart, amount);
-
             productManager.AddProductToCart(product, amount, cart);
 
-            Assert.AreEqual(expected, cart.GetCartItems()[0], "Product has not been added to Cart");
+            Assert.AreEqual(1, cart.GetCartItems().Count, "Product has not been added to Cart");
         }
 
         [Test]

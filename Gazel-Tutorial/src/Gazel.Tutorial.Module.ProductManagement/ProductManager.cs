@@ -28,10 +28,6 @@ namespace Gazel.Tutorial.Module.ProductManagement
         {
             product.UpdateProduct(name, price, stock);
         }
-        public CartItem CreateCartItem(Product product, Cart cart, int amount)
-        {
-            return context.New<CartItem>().With(product, cart, amount);
-        }
 
         public void DeleteCartItem(CartItem cartItem)
         {

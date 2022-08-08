@@ -33,12 +33,5 @@ namespace Gazel.Tutorial.Test.ProductManagement
 
             return cart;
         }
-
-        protected CartItem CreateCartItem(Product product, Cart cart, int amount)
-        {
-            var cartItem = Context.Get<ProductManager>().CreateCartItem(product, cart, amount);
-
-            return cartItem;
-        }
     }
 }

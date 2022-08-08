@@ -1,0 +1,8 @@
+# ignore All directories named .vs
+**/.vs
+
+# ignore All obj folders
+**/obj
+
+# ignore All bin folders
+**/bin

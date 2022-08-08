@@ -10,6 +10,7 @@
 
     public interface IProductService
     {
+        void UpdateProduct(string name = null, float price = default(float), int stock = default(int));
         void RemoveProduct();
     }
 

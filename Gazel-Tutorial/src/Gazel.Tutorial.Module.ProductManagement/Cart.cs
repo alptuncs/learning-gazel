@@ -1,9 +1,10 @@
 ﻿using Gazel.DataAccess;
+using Gazel.Tutorial.Module.ProductManagement.Service;
 
 namespace Gazel.Tutorial.Module.ProductManagement
 {
 
-    public class Cart
+    public class Cart : ICartInfo, ICartService
     {
         private readonly IRepository<Cart> repository;
         private readonly IModuleContext context;
@@ -87,8 +88,34 @@ namespace Gazel.Tutorial.Module.ProductManagement
         {
             return context.Query<CartItems>().ByCart(this);
         }
+
+        public virtual PurchaseRecord CompletePurchase()
+        {
+            if (context.Query<CartItems>().ByCart(this) == null) throw new Exception("Cart is empty");
+
+            var purchaseRecord = context.New<PurchaseRecord>().With(this);
+
+            UpdateProductStock(context.Query<CartItems>().ByCart(this));
+            TotalCost = 0;
+
+            return purchaseRecord;
+        }
+
+        public virtual void UpdateProductStock(List<CartItem> cartItems)
+        {
+            foreach (var item in cartItems)
+            {
+                item.Product.UpdateProduct(null, default(float), item.Product.Stock - item.Amount);
+                item.RemoveCartItem();
+            }
+        }
+
+        public virtual List<PurchaseRecord> GetPurchaseRecords()
+        {
+            return context.Query<PurchaseRecords>().ByCart(this);
+        }
     }
-    public class Carts : Query<Cart>
+    public class Carts : Query<Cart>, ICartsService
     {
         public Carts(IModuleContext context) : base(context) { }
 
@@ -96,6 +123,20 @@ namespace Gazel.Tutorial.Module.ProductManagement
         {
             return SingleBy(t => t.UserName == userName);
         }
+
+        public List<Cart> ByNotEmpty()
+        {
+            return By(t => t.TotalCost > 0);
+        }
+
+        ICartInfo ICartsService.GetCart(Cart cart) =>
+            SingleById(cart.Id);
+
+        ICartInfo ICartsService.GetCartWithName(string name) =>
+            SingleByUserName(name);
+
+        List<ICartInfo> ICartsService.GetNonEmptyCarts() =>
+            ByNotEmpty().Cast<ICartInfo>().ToList();
     }
 }
 

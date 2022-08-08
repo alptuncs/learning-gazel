@@ -45,7 +45,7 @@ namespace Gazel.Tutorial.Module.ProductManagement
         }
 
         public virtual void RemoveProduct()
-        {   
+        {
             context.Query<CartItems>().ByProduct(this).ForEach(t => t.Cart.RemoveFromCart(this));
             repository.Delete(this);
         }
@@ -65,29 +65,29 @@ namespace Gazel.Tutorial.Module.ProductManagement
             return By(t => t.Stock > 0);
         }
 
-        public List<Product> ByPriceHigherThan(float lowerBound)
+        public List<Product> ByLowerBound(float lowerBound)
         {
             return By(t => t.Price >= lowerBound);
         }
 
-        public List<Product> ByPriceLowerThan(float upperBound)
+        public List<Product> ByUpperBound(float upperBound)
         {
             return By(t => t.Price <= upperBound);
         }
 
-        public List<Product> ByPriceRange(float lowerBound, float upperBound)
+        public List<Product> By(float lowerBound, float upperBound)
         {
-            return ByPriceHigherThan(lowerBound).Intersect(ByPriceLowerThan(upperBound)).ToList();
+            return ByLowerBound(lowerBound).Intersect(ByUpperBound(upperBound)).ToList();
         }
 
         IProductInfo IProductsService.GetProduct(Product product) =>
-        SingleById(product.Id);
+            SingleById(product.Id);
 
         List<IProductInfo> IProductsService.GetProductsWithPositiveStock() =>
             ByPositiveStock().Cast<IProductInfo>().ToList();
 
         List<IProductInfo> IProductsService.GetProductsWithinPriceRange(float lowerBound, float upperBound) =>
-            ByPriceRange(lowerBound, upperBound).Cast<IProductInfo>().ToList();
+            By(lowerBound, upperBound).Cast<IProductInfo>().ToList();
 
         List<IProductInfo> IProductsService.GetProductsWithName(string name) =>
             ByName(name).Cast<IProductInfo>().ToList();

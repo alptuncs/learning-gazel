@@ -9,11 +9,16 @@
 
     public interface ICartService
     {
-
+        void AddToCart(Product product, int amount);
+        void AddToCart(Product product);
+        void RemoveFromCart(Product product);
+        void RemoveAllProducts();
+        void DeleteCart();
     }
-
     public interface ICartsService
     {
-
+        ICartInfo GetCart(Cart cart);
+        List<ICartInfo> GetNonEmptyCarts();
+        ICartInfo GetCartWithName(string name);
     }
 }

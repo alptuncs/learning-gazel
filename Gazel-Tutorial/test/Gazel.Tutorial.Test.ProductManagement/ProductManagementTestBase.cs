@@ -20,7 +20,7 @@ namespace Gazel.Tutorial.Test.ProductManagement
             productManager = Context.Get<ProductManager>();
         }
 
-        protected Product CreateProduct(string name = "Test Product", float price = 4.99F, int stock = 20)
+        protected Product CreateProduct(string name = "Test Product", float price = 4.99F, int stock = int.MaxValue)
         {
             var product = Context.Get<ProductManager>().CreateProduct(name, price, stock);
 

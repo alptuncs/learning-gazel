@@ -15,7 +15,7 @@
 
     public interface IProductsService
     {
-        IProductInfo GetProduct(int productId);
+        IProductInfo GetProduct(Product product);
         List<IProductInfo> GetProductsWithPositiveStock();
         List<IProductInfo> GetProductsWithName(string name);
         List<IProductInfo> GetProductsWithinPriceRange(float lowerBound, float upperBound);

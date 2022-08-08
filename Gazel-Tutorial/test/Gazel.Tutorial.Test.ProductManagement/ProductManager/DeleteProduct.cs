@@ -14,16 +14,16 @@ namespace Inventiv.ToDo.Test.UnitTest.TaskManagement
             var firstCart = CreateCart("firstCart");
             var secondCart = CreateCart("secondCart");
 
-            productManager.AddProductToCart(product, 2, firstCart);
-            productManager.AddProductToCart(product, 2, secondCart);
+            firstCart.AddToCart(product);
+            secondCart.AddToCart(product);
 
             BeginTest();
 
-            productManager.DeleteProduct(product);
+            product.RemoveProduct();
 
             Verify.ObjectIsDeleted(product);
-            Assert.AreEqual(0, firstCart.GetCartItems().Count, "Product did not get removed from first cart");
-            Assert.AreEqual(0, secondCart.GetCartItems().Count, "Product did not get removed from first cart");
+            Assert.IsEmpty(firstCart.GetCartItems(), "Product did not get removed from first cart");
+            Assert.IsEmpty(secondCart.GetCartItems(), "Product did not get removed from first cart");
         }
     }
 }

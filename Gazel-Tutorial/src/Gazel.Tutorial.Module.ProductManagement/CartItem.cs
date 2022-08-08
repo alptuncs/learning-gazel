@@ -51,17 +51,12 @@ namespace Gazel.Tutorial.Module.ProductManagement
             return By(t => t.Cart == cart);
         }
 
-        public CartItem SingleById(int id)
-        {
-            return SingleBy(t => t.Id == id);
-        }
-
         public List<CartItem> ByProduct(Product product)
         {
             return By(t => t.Product.Id == product.Id);
         }
 
-        public CartItem SingleByCartAndProduct(Cart cart, Product product)
+        public CartItem SingleBy(Cart cart, Product product)
         {
             return SingleBy(t => t.Cart == cart && t.Product == product);
         }

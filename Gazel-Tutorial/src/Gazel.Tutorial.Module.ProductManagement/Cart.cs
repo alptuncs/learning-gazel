@@ -32,9 +32,12 @@ namespace Gazel.Tutorial.Module.ProductManagement
 
         public virtual void AddToCart(Product product, int amount)
         {
-            if (context.Query<CartItems>().SingleByCartAndProduct(this, product) != null)
+            if (amount > product.Stock) throw new Exception($"There are {product.Stock} amount of products in stock, can't add {amount} amount to your cart");
+
+            if (context.Query<CartItems>().SingleBy(this, product) != null)
             {
-                context.Query<CartItems>().SingleByCartAndProduct(this, product).UpdateCartItem(amount);
+                var cartItem = context.Query<CartItems>().SingleBy(this, product);
+                cartItem.UpdateCartItem(cartItem.Amount + amount);
             }
             else
             {
@@ -44,14 +47,31 @@ namespace Gazel.Tutorial.Module.ProductManagement
             TotalCost += product.Price * amount;
         }
 
+        public virtual void AddToCart(Product product)
+        {
+            if (product.Stock == 0) throw new Exception($"There are {product.Stock} amount of products in stock, can't add product to your cart");
+
+            if (context.Query<CartItems>().SingleBy(this, product) != null)
+            {
+                var cartItem = context.Query<CartItems>().SingleBy(this, product);
+                cartItem.UpdateCartItem(cartItem.Amount + 1);
+            }
+            else
+            {
+                context.New<CartItem>().With(product, this, 1);
+            }
+
+            TotalCost += product.Price;
+        }
+
         public virtual void RemoveFromCart(Product product)
         {
-            var cartItem = context.Query<CartItems>().SingleByCartAndProduct(this, product);
+            var cartItem = context.Query<CartItems>().SingleBy(this, product);
             TotalCost -= product.Price * cartItem.Amount;
             cartItem.RemoveCartItem();
         }
 
-        public virtual void EmptyCart()
+        public virtual void RemoveAllProducts()
         {
             context.Query<CartItems>().ByCart(this).ForEach(t => t.RemoveCartItem());
             TotalCost = 0;
@@ -59,6 +79,7 @@ namespace Gazel.Tutorial.Module.ProductManagement
 
         public virtual void DeleteCart()
         {
+            RemoveAllProducts();
             repository.Delete(this);
         }
 
@@ -74,11 +95,6 @@ namespace Gazel.Tutorial.Module.ProductManagement
         public Cart SingleByUserName(string userName)
         {
             return SingleBy(t => t.UserName == userName);
-        }
-
-        public Cart SingleById(int id)
-        {
-            return SingleBy(t => t.Id == id);
         }
     }
 }

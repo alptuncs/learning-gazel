@@ -8,12 +8,14 @@ namespace Gazel.Tutorial.Module.ProductManagement
     public class Product : IProductInfo, IProductService
     {
         private IRepository<Product> repository;
+        private readonly IModuleContext context;
 
         protected Product() { }
 
-        public Product(IRepository<Product> repository)
+        public Product(IRepository<Product> repository, IModuleContext context)
         {
             this.repository = repository;
+            this.context = context;
         }
 
         public virtual int Id { get; protected set; }
@@ -43,7 +45,8 @@ namespace Gazel.Tutorial.Module.ProductManagement
         }
 
         public virtual void RemoveProduct()
-        {
+        {   
+            context.Query<CartItems>().ByProduct(this).ForEach(t => t.Cart.RemoveFromCart(this));
             repository.Delete(this);
         }
     }
@@ -77,13 +80,8 @@ namespace Gazel.Tutorial.Module.ProductManagement
             return ByPriceHigherThan(lowerBound).Intersect(ByPriceLowerThan(upperBound)).ToList();
         }
 
-        public Product SingleById(int productId)
-        {
-            return SingleBy(t => t.Id == productId);
-        }
-
-        IProductInfo IProductsService.GetProduct(int productId) =>
-        SingleById(productId);
+        IProductInfo IProductsService.GetProduct(Product product) =>
+        SingleById(product.Id);
 
         List<IProductInfo> IProductsService.GetProductsWithPositiveStock() =>
             ByPositiveStock().Cast<IProductInfo>().ToList();

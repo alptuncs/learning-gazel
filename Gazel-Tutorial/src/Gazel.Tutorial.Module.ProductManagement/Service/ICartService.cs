@@ -1,11 +1,15 @@
 ﻿namespace Gazel.Tutorial.Module.ProductManagement.Service
 {
-    public interface ICartService
+    public interface ICartInfo
     {
         int Id { get; }
-        List<CartItem> CartProducts { get; }
         string UserName { get; }
         float TotalCost { get; }
+    }
+
+    public interface ICartService
+    {
+
     }
 
     public interface ICartsService

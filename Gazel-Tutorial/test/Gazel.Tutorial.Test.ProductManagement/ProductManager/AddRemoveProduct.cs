@@ -8,14 +8,28 @@ namespace Inventiv.ToDo.Test.UnitTest.TaskManagement
     {
         [TestCase(5)]
         [TestCase(1)]
-        public void GIVEN_there_exists_a_product__WHEN_user_adds_certain_amount_of_that_product_to_cart__THEN_product_is_added_to_cart(int amount)
+        public void GIVEN_there_exists_a_product__WHEN_user_adds_certain_amount_of_that_product_to_cart__THEN_product_is_added_to_cart_with_given_amount(int amount)
         {
             var product = CreateProduct();
             var cart = CreateCart();
 
             BeginTest();
 
-            productManager.AddProductToCart(product, amount, cart);
+            cart.AddToCart(product, amount);
+
+            Assert.AreEqual(1, cart.GetCartItems().Count, "Product has not been added to Cart");
+            Assert.AreEqual(amount, cart.GetCartItems()[0].Amount, "Product has not been added to Cart");
+        }
+
+        [Test]
+        public void GIVEN_there_exists_a_product__WHEN_user_adds_certain_product_to_cart_without_giving_amount__THEN_product_is_added_to_cart()
+        {
+            var product = CreateProduct();
+            var cart = CreateCart();
+
+            BeginTest();
+
+            cart.AddToCart(product);
 
             Assert.AreEqual(1, cart.GetCartItems().Count, "Product has not been added to Cart");
         }
@@ -23,12 +37,12 @@ namespace Inventiv.ToDo.Test.UnitTest.TaskManagement
         [Test]
         public void GIVEN_there_exists_a_product__WHEN_user_adds_more_than_stock_to_cart__THEN_system_gives_an_error()
         {
-            var product = CreateProduct();
+            var product = CreateProduct("test", 4.99F, 20);
             var cart = CreateCart();
 
             BeginTest();
 
-            Assert.Throws<Exception>(() => productManager.AddProductToCart(product, product.Stock + 1, cart));
+            Assert.Throws<Exception>(() => cart.AddToCart(product, 21));
         }
 
         [Test]
@@ -37,33 +51,33 @@ namespace Inventiv.ToDo.Test.UnitTest.TaskManagement
             var product = CreateProduct();
             var cart = CreateCart();
 
-            productManager.AddProductToCart(product, 2, cart);
+            cart.AddToCart(product);
 
             BeginTest();
 
-            productManager.RemoveProductFromCart(product, cart);
+            cart.RemoveFromCart(product);
 
-            Assert.AreEqual(0, cart.GetCartItems().Count, "Product has not been removed from Cart");
+            Assert.IsEmpty(cart.GetCartItems(), "Product has not been removed from Cart");
         }
 
         [Test]
         public void GIVEN_there_exists_products_in_cart__WHEN_user_empties_his_cart__THEN_all_products_are_removed_from_cart()
         {
-            var firstProduct = CreateProduct("Çerezza");
-            var secondProduct = CreateProduct("Capri Sun");
-            var thirdProduct = CreateProduct("Lays");
+            var firstProduct = CreateProduct("first");
+            var secondProduct = CreateProduct("second");
+            var thirdProduct = CreateProduct("third");
 
             var cart = CreateCart();
 
-            productManager.AddProductToCart(firstProduct, 2, cart);
-            productManager.AddProductToCart(secondProduct, 2, cart);
-            productManager.AddProductToCart(thirdProduct, 2, cart);
+            cart.AddToCart(firstProduct);
+            cart.AddToCart(secondProduct);
+            cart.AddToCart(thirdProduct);
 
             BeginTest();
 
-            productManager.RemoveAllProductsFromCart(cart);
+            cart.RemoveAllProducts();
 
-            Assert.AreEqual(0, cart.GetCartItems().Count, "Products have not been removed from Cart");
+            Assert.IsEmpty(cart.GetCartItems(), "Products have not been removed from Cart");
         }
     }
 }

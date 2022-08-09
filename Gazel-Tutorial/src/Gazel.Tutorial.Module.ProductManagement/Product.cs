@@ -16,7 +16,7 @@ namespace Gazel.Tutorial.Module.ProductManagement
         {
             this.repository = repository;
             this.context = context;
-        }
+        } 
 
         public virtual int Id { get; protected set; }
         public virtual string ProductName { get; protected set; }

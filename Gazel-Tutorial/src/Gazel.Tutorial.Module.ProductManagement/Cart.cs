@@ -74,7 +74,7 @@ namespace Gazel.Tutorial.Module.ProductManagement
 
         public virtual PurchaseRecord CompletePurchase()
         {
-            if (PurchaseComplete) throw new Exception("This is a purchase record");
+            if (PurchaseComplete) throw new Exception("Purchase could not be completed,this cart already completed purchase before");
 
             if (context.Query<CartItems>().ByCart(this) == null) throw new Exception("Cart is empty");
 

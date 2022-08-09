@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Inventiv.Todo.App.Service
+namespace Gazel.Tutorial.App.Service
 {
     public class Startup
     {
@@ -19,7 +19,7 @@ namespace Inventiv.Todo.App.Service
             services.AddGazelServiceApplication(cfg,
                 database: c => c.Sqlite("gazel.tutorial.db"),
                 service: c => c.Routine("http://localhost:5000/service"),
-                logging: c => c.Log4Net(Gazel.Logging.LogLevel.Info, l => l.DefaultConsoleAppenders()),
+                logging: c => c.Log4Net(Logging.LogLevel.Info, l => l.DefaultConsoleAppenders()),
                 authentication: c => c.AllowAnonymous(),
                 authorization: c => c.AllowAll()
             );

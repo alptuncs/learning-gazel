@@ -9,7 +9,7 @@ using Gazel.Configuration;
 
 namespace Gazel.Tutorial.App.Service
 {
-    public class TaskApi : ICodingStyleConfiguration
+    public class ProductAPi : ICodingStyleConfiguration
     {
         public void Configure(ConventionBasedCodingStyle codingStyle, IKernel kernel)
         {

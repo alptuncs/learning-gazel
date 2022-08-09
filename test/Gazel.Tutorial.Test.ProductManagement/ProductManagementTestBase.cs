@@ -1,7 +1,5 @@
 ﻿using Gazel.Tutorial.Module.ProductManagement;
-using Gazel.Tutorial.Module.ProductManagement.Service;
 using Gazel.UnitTesting;
-using NUnit.Framework;
 
 namespace Gazel.Tutorial.Test.ProductManagement
 {
@@ -28,9 +26,21 @@ namespace Gazel.Tutorial.Test.ProductManagement
             return product;
         }
 
-        protected Cart CreateCart(string userName = "Test User")
+        protected Cart CreateCart(string userName = "Test User", bool empty = true, params Product[] products)
         {
             var cart = Context.Get<ProductManager>().CreateCart(userName);
+
+            if (!empty)
+            {
+                cart.AddToCart(CreateProduct());
+                cart.AddToCart(CreateProduct());
+                cart.AddToCart(CreateProduct());
+            }
+
+            foreach (var product in products)
+            {
+                cart.AddToCart(product);
+            }
 
             return cart;
         }

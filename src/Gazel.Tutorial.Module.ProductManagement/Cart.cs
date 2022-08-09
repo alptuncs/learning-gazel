@@ -121,4 +121,3 @@ namespace Gazel.Tutorial.Module.ProductManagement
             NotEmpty().Cast<ICartInfo>().ToList();
     }
 }
-

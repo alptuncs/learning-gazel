@@ -1,7 +1,6 @@
-﻿using Gazel.Tutorial.Test.ProductManagement;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
-namespace Inventiv.ToDo.Test.UnitTest.TaskManagement
+namespace Gazel.Tutorial.Test.ProductManagement
 {
     [TestFixture]
     public class AddRemoveProduct : ProductManagementTestBase
@@ -19,8 +18,8 @@ namespace Inventiv.ToDo.Test.UnitTest.TaskManagement
             var actual = cart.GetCartItems().FirstOrDefault();
 
             Assert.IsNotNull(actual);
-            Assert.AreEqual(product, actual.Product);
-            Assert.AreEqual(1, actual.Amount);
+            Assert.AreEqual(product, actual?.Product);
+            Assert.AreEqual(1, actual?.Amount);
         }
 
         [Test]
@@ -36,18 +35,6 @@ namespace Inventiv.ToDo.Test.UnitTest.TaskManagement
             var cartItem = cart.GetCartItems().First();
 
             Assert.AreEqual(2, cartItem.Amount);
-        }
-
-
-        [Test]
-        public void GIVEN_there_exists_a_product__WHEN_user_adds_more_than_stock_to_cart__THEN_system_gives_an_error()
-        {
-            var product = CreateProduct(stock: 20);
-            var cart = CreateCart();
-
-            BeginTest();
-
-            Assert.Throws<Exception>(() => cart.AddToCart(product, 21));
         }
 
         [Test]

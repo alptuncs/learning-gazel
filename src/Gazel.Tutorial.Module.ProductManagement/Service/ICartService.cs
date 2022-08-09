@@ -4,7 +4,7 @@
     {
         int Id { get; }
         string UserName { get; }
-        float TotalCost { get; }
+        Money TotalCost { get; }
         bool PurchaseComplete { get; }
     }
 
@@ -16,6 +16,7 @@
         PurchaseRecord CompletePurchase();
 
     }
+
     public interface ICartsService
     {
         ICartInfo GetCart(Cart cart);

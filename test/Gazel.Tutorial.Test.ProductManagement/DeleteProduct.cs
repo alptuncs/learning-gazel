@@ -1,7 +1,6 @@
-﻿using Gazel.Tutorial.Test.ProductManagement;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
-namespace Inventiv.ToDo.Test.UnitTest.TaskManagement
+namespace Gazel.Tutorial.Test.ProductManagement
 {
     [TestFixture]
     public class DeleteProduct : ProductManagementTestBase

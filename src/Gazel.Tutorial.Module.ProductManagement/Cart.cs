@@ -3,7 +3,6 @@ using Gazel.Tutorial.Module.ProductManagement.Service;
 
 namespace Gazel.Tutorial.Module.ProductManagement
 {
-
     public class Cart : ICartInfo, ICartService
     {
         private readonly IRepository<Cart> repository;
@@ -19,14 +18,14 @@ namespace Gazel.Tutorial.Module.ProductManagement
 
         public virtual int Id { get; protected set; }
         public virtual string UserName { get; protected set; }
-        public virtual float TotalCost { get; protected set; }
+        public virtual Money TotalCost { get; protected set; }
         public virtual bool PurchaseComplete { get; protected set; }
 
         protected internal virtual Cart With(string userName, bool purchaseComplete = false)
         {
             UserName = userName;
             PurchaseComplete = purchaseComplete;
-            TotalCost = 0;
+            TotalCost = default;
 
             repository.Insert(this);
 
@@ -35,26 +34,23 @@ namespace Gazel.Tutorial.Module.ProductManagement
 
         public virtual void AddToCart(Product product, int amount = 1)
         {
-            if (PurchaseComplete) return;
+            if (PurchaseComplete) new Exception("Cannot modify cart after being purchased");
 
-            if (amount > product.Stock) throw new Exception($"There are {product.Stock} amount of products in stock, can't add {amount} amount to your cart");
+            var cartItem = context.Query<CartItems>().SingleBy(this, product);
+            if (cartItem == null)
+            {
+                cartItem = context.New<CartItem>().With(product, this);
+            }
 
-            if (context.Query<CartItems>().SingleBy(this, product) != null)
-            {
-                var cartItem = context.Query<CartItems>().SingleBy(this, product);
-                cartItem.UpdateCartItem(cartItem.Amount + amount);
-            }
-            else
-            {
-                context.New<CartItem>().With(product, this, amount);
-            }
+            cartItem.IncreaseAmount(amount);
 
             TotalCost += product.Price * amount;
         }
 
         public virtual void RemoveFromCart(Product product)
         {
-            if (PurchaseComplete) return;
+            if (PurchaseComplete) new Exception("Cannot modify cart after being purchased");
+
             var cartItem = context.Query<CartItems>().SingleBy(this, product);
             TotalCost -= product.Price * cartItem.Amount;
             cartItem.RemoveCartItem();
@@ -62,9 +58,10 @@ namespace Gazel.Tutorial.Module.ProductManagement
 
         public virtual void RemoveAllProducts()
         {
-            if (PurchaseComplete) return;
+            if (PurchaseComplete) new Exception("Cannot modify cart after being purchased");
+
             context.Query<CartItems>().ByCart(this).ForEach(t => t.RemoveCartItem());
-            TotalCost = 0;
+            TotalCost = default;
         }
 
         public virtual List<CartItem> GetCartItems()
@@ -75,21 +72,16 @@ namespace Gazel.Tutorial.Module.ProductManagement
         public virtual PurchaseRecord CompletePurchase()
         {
             if (PurchaseComplete) throw new Exception("Purchase could not be completed. This cart has already completed a purchase before");
-
             if (context.Query<CartItems>().ByCart(this) == null) throw new Exception("Cart is empty");
 
-            var purchaseRecord = context.New<PurchaseRecord>().With(this);
-
-            context.Query<CartItems>().ByCart(this).ForEach(t => UpdateProductStock(t));
+            foreach (var item in context.Query<CartItems>().ByCart(this))
+            {
+                item.Product.DecreaseStock(item.Amount);
+            }
 
             PurchaseComplete = true;
 
-            return purchaseRecord;
-        }
-
-        public virtual void UpdateProductStock(CartItem item)
-        {
-            item.Product.UpdateProductStock(item.Product.Stock - item.Amount);
+            return context.New<PurchaseRecord>().With(this);
         }
 
         public virtual PurchaseRecord GetPurchaseRecord()
@@ -97,6 +89,7 @@ namespace Gazel.Tutorial.Module.ProductManagement
             return context.Query<PurchaseRecords>().SingleByCart(this);
         }
     }
+
     public class Carts : Query<Cart>, ICartsService
     {
         public Carts(IModuleContext context) : base(context) { }

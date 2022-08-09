@@ -1,63 +1,74 @@
-﻿using Gazel;
-using Gazel.DataAccess;
+﻿using Gazel.DataAccess;
 using Gazel.Tutorial.Module.ProductManagement.Service;
 
 namespace Gazel.Tutorial.Module.ProductManagement
 {
-
     public class Product : IProductInfo, IProductService
     {
-        private IRepository<Product> repository;
+        private readonly IRepository<Product> repository;
         private readonly IModuleContext context;
 
         protected Product() { }
-
         public Product(IRepository<Product> repository, IModuleContext context)
         {
             this.repository = repository;
             this.context = context;
-        }  
+        }
 
         public virtual int Id { get; protected set; }
-        public virtual string ProductName { get; protected set; }
-        public virtual float Price { get; protected set; }
+        public virtual string Name { get; protected set; }
+        public virtual Money Price { get; protected set; }
         public virtual int Stock { get; protected set; }
-        public virtual bool Avalible { get; protected set; }
+        public virtual bool Available { get; protected set; }
 
-        protected internal virtual Product With(string name, float price, int stock, bool avalible = true)
+        protected internal virtual Product With(string name, Money price, int stock, bool avalible = true)
         {
-            ProductName = name;
+            Name = name;
             Price = price;
             Stock = stock;
-            Avalible = avalible;
+            Available = avalible;
 
             repository.Insert(this);
 
             return this;
         }
 
-        public virtual void UpdateProductStock(int stock)
+        public virtual void Update(string name = default)
         {
-            Stock = stock;
+            Name = name ?? Name;
         }
 
-        public virtual Product UpdateProductInfo(string name = null, float price = default(float), int stock = default(int))
+        public virtual void DecreaseStock(int amount)
         {
-            if (name.IsNullOrWhiteSpace()) name = ProductName;
-            if (price.IsDefault()) price = Price;
-            if (stock.IsDefault()) stock = Stock;
+            if (amount > Stock) throw new Exception("Not enough stock");
 
-            var newProduct = context.New<Product>().With(name, price, stock);
+            Stock -= amount;
+        }
 
-            context.Query<CartItems>().ByPurchaseComplete(false).ForEach(t => t.UpdateProduct(newProduct));
+        public virtual Product RevisePrice(Money price)
+        {
+            if (price.IsDefault()) throw new Exception("price cannot be null");
 
-            return newProduct;
+            var result = context.New<Product>().With(Name, price, Stock);
+
+            foreach (var item in context.Query<CartItems>().By(this, purchaseComplete: false))
+            {
+                item.UpdateProduct(result);
+            }
+
+            Stock = 0;
+
+            return result;
         }
 
         public virtual void RemoveProduct()
         {
-            context.Query<CartItems>().ByProduct(this).ForEach(t => t.Cart.RemoveFromCart(this));
-            Avalible = false;
+            foreach (var item in context.Query<CartItems>().By(this, purchaseComplete: false))
+            {
+                item.Cart.RemoveFromCart(this);
+            }
+
+            Available = false;
         }
     }
 
@@ -65,14 +76,14 @@ namespace Gazel.Tutorial.Module.ProductManagement
     {
         public Products(IModuleContext context) : base(context) { }
 
-        public List<Product> ByAvalible(bool avalible)
+        public List<Product> ByAvailable(bool available)
         {
-            return By(t => t.Avalible == avalible);
+            return By(t => t.Available == available);
         }
 
         public List<Product> ByName(string name)
         {
-            return By(t => t.ProductName == name);
+            return By(t => t.Name == name);
         }
 
         public List<Product> ByPositiveStock()
@@ -80,19 +91,9 @@ namespace Gazel.Tutorial.Module.ProductManagement
             return By(t => t.Stock > 0);
         }
 
-        public List<Product> ByLowerBound(float lowerBound)
+        public List<Product> ByPriceRange(MoneyRange priceRange)
         {
-            return By(t => t.Price >= lowerBound);
-        }
-
-        public List<Product> ByUpperBound(float upperBound)
-        {
-            return By(t => t.Price <= upperBound);
-        }
-
-        public List<Product> By(float lowerBound, float upperBound)
-        {
-            return ByLowerBound(lowerBound).Intersect(ByUpperBound(upperBound)).ToList();
+            return By(t => t.Price >= priceRange.Start && t.Price <= priceRange.End);
         }
 
         IProductInfo IProductsService.GetProduct(Product product) =>
@@ -101,8 +102,8 @@ namespace Gazel.Tutorial.Module.ProductManagement
         List<IProductInfo> IProductsService.GetProductsWithPositiveStock() =>
             ByPositiveStock().Cast<IProductInfo>().ToList();
 
-        List<IProductInfo> IProductsService.GetProductsWithinPriceRange(float lowerBound, float upperBound) =>
-            By(lowerBound, upperBound).Cast<IProductInfo>().ToList();
+        List<IProductInfo> IProductsService.GetProductsWithinPriceRange(MoneyRange range) =>
+            ByPriceRange(range).Cast<IProductInfo>().ToList();
 
         List<IProductInfo> IProductsService.GetProductsWithName(string name) =>
             ByName(name).Cast<IProductInfo>().ToList();

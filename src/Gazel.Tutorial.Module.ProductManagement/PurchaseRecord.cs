@@ -3,15 +3,17 @@ using Gazel.Tutorial.Module.ProductManagement.Service;
 
 namespace Gazel.Tutorial.Module.ProductManagement
 {
-
     public class PurchaseRecord : IPurchaseRecordInfo
     {
         private readonly IRepository<PurchaseRecord> repository;
+        private readonly ISystem system;
+
         protected PurchaseRecord() { }
 
-        public PurchaseRecord(IRepository<PurchaseRecord> repository)
+        public PurchaseRecord(IRepository<PurchaseRecord> repository, ISystem system)
         {
             this.repository = repository;
+            this.system = system;
         }
 
         public virtual int Id { get; protected set; }
@@ -21,7 +23,7 @@ namespace Gazel.Tutorial.Module.ProductManagement
         protected internal virtual PurchaseRecord With(Cart cart)
         {
             Cart = cart;
-            this.DateTime = DateTime.UtcNow;
+            DateTime = system.Now;
 
             repository.Insert(this);
 

@@ -1,15 +1,12 @@
 ﻿using Gazel.DataAccess;
-using Gazel.Tutorial.Module.ProductManagement.Service;
 
 namespace Gazel.Tutorial.Module.ProductManagement
 {
-
     public class CartItem
     {
         private IRepository<CartItem> repository;
 
         protected CartItem() { }
-
         public CartItem(IRepository<CartItem> repository)
         {
             this.repository = repository;
@@ -20,29 +17,29 @@ namespace Gazel.Tutorial.Module.ProductManagement
         public virtual Product Product { get; protected set; }
         public virtual Cart Cart { get; protected set; }
 
-        protected internal virtual CartItem With(Product product, Cart cart, int amount)
+        protected internal virtual CartItem With(Product product, Cart cart)
         {
             Product = product;
             Cart = cart;
-            Amount = amount;
+            Amount = 0;
+
             repository.Insert(this);
 
             return this;
         }
 
-        public virtual void UpdateProduct(Product product)
+        protected internal virtual void UpdateProduct(Product product)
         {
             Product = product;
         }
 
-        public virtual void UpdateCartItem(int amount)
+        protected internal virtual void IncreaseAmount(int amount)
         {
-            Amount = amount;
+            Amount += amount;
         }
 
         public virtual void RemoveCartItem()
         {
-
             repository.Delete(this);
         }
     }
@@ -56,14 +53,11 @@ namespace Gazel.Tutorial.Module.ProductManagement
             return By(t => t.Cart == cart);
         }
 
-        public List<CartItem> ByPurchaseComplete(bool purchaseComplete)
+        public List<CartItem> By(Product product, bool? purchaseComplete = default)
         {
-            return By(t => t.Cart.PurchaseComplete == purchaseComplete);
-        }
-
-        public List<CartItem> ByProduct(Product product)
-        {
-            return By(t => t.Product.Id == product.Id);
+            return By(t => t.Product == product,
+                When(purchaseComplete).IsNotDefault().ThenAnd(t => t.Cart.PurchaseComplete == purchaseComplete)
+            );
         }
 
         public CartItem SingleBy(Cart cart, Product product)

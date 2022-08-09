@@ -1,51 +1,37 @@
-﻿using Gazel.Tutorial.Test.ProductManagement;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
-namespace Inventiv.ToDo.Test.UnitTest.TaskManagement
+namespace Gazel.Tutorial.Test.ProductManagement
 {
     [TestFixture]
     public class CreateUpdateProduct : ProductManagementTestBase
     {
-        [TestCase("Capri Sun", 5.99F, 20)]
-        [TestCase("Çerezza Kokteyl", 12.49F, 15)]
-        public void GIVEN_there_exists_a_product_manager__WHEN_user_creates_a_product_with_name_price_and_stock__THEN_the_product_is_created_and_added_to_database(string name, float price, int stock)
+        [Test]
+        public void GIVEN_there_are_no_products__WHEN_user_creates_a_product_with_name__price_and_stock__THEN_the_product_is_created()
         {
             BeginTest();
 
-            var actual = CreateProduct(name, price, stock);
+            var actual = productManager.CreateProduct("Çerezza", 3.TRY(), 100);
 
             Verify.ObjectIsPersisted(actual);
-            Assert.AreEqual(price, actual.Price, "Price assignment is wrong");
-            Assert.AreEqual(stock, actual.Stock, "Stock assignment is wrong");
-            Assert.AreEqual(name, actual.ProductName, "Name assignment is wrong");
+            Assert.AreEqual("Çerezza", actual.Name);
+            Assert.AreEqual(3.TRY(), actual.Price);
+            Assert.AreEqual(100, actual.Stock);
         }
 
-        [TestCase("Updated Product Name")]
-        public void GIVEN_there_exists_a_product__WHEN_user_updates_product_name__Then_name_changes_but_product_price_and_stock_does_not_change(string name)
+        [Test]
+        public void GIVEN_there_exists_a_product_within_carts__WHEN_its_price_is_revised_THEN_new_price_should_be_reflected_to_all_unpurchased_carts()
         {
-            var product = CreateProduct();
+            var product = CreateProduct(price: 3.TRY());
+            var unpurchased = CreateCart(products: new[] { product });
+            var purchased = CreateCart(purchased: true, products: new[] { product });
 
             BeginTest();
 
-            var actual = product.UpdateProductInfo(name);
+            var actual = product.RevisePrice(4.TRY());
 
-            Assert.AreNotEqual(actual.ProductName, product.ProductName, "ProductName has not changed");
-            Assert.AreEqual(actual.Price, product.Price, "Price has changed");
-            Assert.AreEqual(actual.Stock, product.Stock, "Stock has changed");
-        }
-
-        [TestCase(null)]
-        [TestCase("")]
-        [TestCase(" ")]
-        public void GIVEN_there_exists_a_product__WHEN_user_updates_product_name_with_empty_name_or_null__THEN_product_name_does_not_change(string name)
-        {
-            var product = CreateProduct();
-
-            BeginTest();
-
-            var actual = product.UpdateProductInfo(name);
-
-            Assert.AreEqual(actual.ProductName, product.ProductName, "Product name has changed, when it shouldn't have");
+            Assert.AreEqual(4.TRY(), actual.Price);
+            Assert.AreEqual(4.TRY(), unpurchased.GetCartItems().First().Product.Price);
+            Assert.AreEqual(3.TRY(), purchased.GetCartItems().First().Product.Price);
         }
     }
 }

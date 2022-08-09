@@ -1,5 +1,4 @@
-﻿using Gazel;
-using Gazel.Tutorial.Module.ProductManagement.Service;
+﻿using Gazel.Tutorial.Module.ProductManagement.Service;
 
 namespace Gazel.Tutorial.Module.ProductManagement
 {
@@ -12,7 +11,7 @@ namespace Gazel.Tutorial.Module.ProductManagement
             this.context = context;
         }
 
-        public Product CreateProduct(string name, float price, int stock)
+        public Product CreateProduct(string name, Money price, int stock)
         {
             return context.New<Product>().With(name, price, stock);
         }

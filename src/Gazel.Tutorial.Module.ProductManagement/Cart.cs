@@ -34,33 +34,36 @@ namespace Gazel.Tutorial.Module.ProductManagement
 
         public virtual void AddToCart(Product product, int amount = 1)
         {
-            if (PurchaseComplete) new Exception("Cannot modify cart after being purchased");
+            if (PurchaseComplete) throw new Exception("Cannot modify cart after being purchased");
 
-            var cartItem = context.Query<CartItems>().SingleBy(this, product);
-            if (cartItem == null)
-            {
-                cartItem = context.New<CartItem>().With(product, this);
-            }
+            var item = context.Query<CartItems>().SingleBy(this, product) ??
+                       context.New<CartItem>().With(product, this);
 
-            cartItem.IncreaseAmount(amount);
+            item.IncreaseAmount(amount);
 
-            TotalCost += product.Price * amount;
+            TotalCost += item.Price;
         }
 
         public virtual void RemoveFromCart(Product product)
         {
-            if (PurchaseComplete) new Exception("Cannot modify cart after being purchased");
+            if (PurchaseComplete) throw new Exception("Cannot modify cart after being purchased");
 
-            var cartItem = context.Query<CartItems>().SingleBy(this, product);
-            TotalCost -= product.Price * cartItem.Amount;
-            cartItem.RemoveCartItem();
+            var item = context.Query<CartItems>().SingleBy(this, product);
+            if (item == null) throw new Exception("Product not found in cart");
+
+            TotalCost -= item.Price;
+            item.Delete();
         }
 
         public virtual void RemoveAllProducts()
         {
-            if (PurchaseComplete) new Exception("Cannot modify cart after being purchased");
+            if (PurchaseComplete) throw new Exception("Cannot modify cart after being purchased");
 
-            context.Query<CartItems>().ByCart(this).ForEach(t => t.RemoveCartItem());
+            foreach (var item in context.Query<CartItems>().ByCart(this))
+            {
+                item.Delete();
+            }
+
             TotalCost = default;
         }
 
@@ -72,7 +75,7 @@ namespace Gazel.Tutorial.Module.ProductManagement
         public virtual PurchaseRecord CompletePurchase()
         {
             if (PurchaseComplete) throw new Exception("Purchase could not be completed. This cart has already completed a purchase before");
-            if (context.Query<CartItems>().ByCart(this) == null) throw new Exception("Cart is empty");
+            if (!context.Query<CartItems>().AnyByCart(this)) throw new Exception("Cart is empty");
 
             foreach (var item in context.Query<CartItems>().ByCart(this))
             {

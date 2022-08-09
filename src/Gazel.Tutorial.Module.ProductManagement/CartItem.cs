@@ -17,6 +17,8 @@ namespace Gazel.Tutorial.Module.ProductManagement
         public virtual Product Product { get; protected set; }
         public virtual Cart Cart { get; protected set; }
 
+        public virtual Money Price => Amount * Product.Price;
+
         protected internal virtual CartItem With(Product product, Cart cart)
         {
             Product = product;
@@ -38,7 +40,7 @@ namespace Gazel.Tutorial.Module.ProductManagement
             Amount += amount;
         }
 
-        public virtual void RemoveCartItem()
+        protected internal virtual void Delete()
         {
             repository.Delete(this);
         }
@@ -48,21 +50,16 @@ namespace Gazel.Tutorial.Module.ProductManagement
     {
         public CartItems(IModuleContext context) : base(context) { }
 
-        public List<CartItem> ByCart(Cart cart)
-        {
-            return By(t => t.Cart == cart);
-        }
+        internal bool AnyByCart(Cart cart) => AnyBy(t => t.Cart == cart);
+        internal List<CartItem> ByCart(Cart cart) => By(t => t.Cart == cart);
+        internal CartItem SingleBy(Cart cart, Product product) => SingleBy(t => t.Cart == cart && t.Product == product);
 
-        public List<CartItem> By(Product product, bool? purchaseComplete = default)
+        internal List<CartItem> By(Product product, bool? purchaseComplete = default)
         {
             return By(t => t.Product == product,
                 When(purchaseComplete).IsNotDefault().ThenAnd(t => t.Cart.PurchaseComplete == purchaseComplete)
             );
         }
 
-        public CartItem SingleBy(Cart cart, Product product)
-        {
-            return SingleBy(t => t.Cart == cart && t.Product == product);
-        }
     }
 }

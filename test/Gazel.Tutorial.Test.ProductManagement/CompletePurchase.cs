@@ -12,7 +12,7 @@ namespace Gazel.Tutorial.Test.ProductManagement
 
             BeginTest();
 
-            var purchase = cart.CompletePurchase();
+            var purchase = cart.Purchase();
 
             Verify.ObjectIsPersisted(purchase);
             Assert.AreEqual(cart, cart.GetPurchaseRecord().Cart);
@@ -26,7 +26,7 @@ namespace Gazel.Tutorial.Test.ProductManagement
 
             BeginTest();
 
-            cart.CompletePurchase();
+            cart.Purchase();
 
             Assert.AreNotEqual(1, product.Stock, $"product stock = {product.Stock}");
         }
@@ -36,11 +36,11 @@ namespace Gazel.Tutorial.Test.ProductManagement
         {
             var product = CreateProduct(stock: 20);
             var cart = CreateCart();
-            cart.AddToCart(product, 21);
+            cart.AddProduct(product, 21);
 
             BeginTest();
 
-            Assert.Throws<Exception>(() => cart.CompletePurchase());
+            Assert.Throws<Exception>(() => cart.Purchase());
         }
     }
 }

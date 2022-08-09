@@ -13,8 +13,8 @@ namespace Gazel.Tutorial.Test.ProductManagement
             var firstCart = CreateCart("firstCart");
             var secondCart = CreateCart("secondCart");
 
-            firstCart.AddToCart(product);
-            secondCart.AddToCart(product);
+            firstCart.AddProduct(product);
+            secondCart.AddProduct(product);
 
             BeginTest();
 

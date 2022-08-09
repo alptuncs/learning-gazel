@@ -13,7 +13,7 @@ namespace Gazel.Tutorial.Test.ProductManagement
 
             BeginTest();
 
-            cart.AddToCart(product);
+            cart.AddProduct(product);
 
             var actual = cart.GetCartItems().FirstOrDefault();
 
@@ -30,7 +30,7 @@ namespace Gazel.Tutorial.Test.ProductManagement
 
             BeginTest();
 
-            cart.AddToCart(product, 2);
+            cart.AddProduct(product, 2);
 
             var cartItem = cart.GetCartItems().First();
 
@@ -46,7 +46,7 @@ namespace Gazel.Tutorial.Test.ProductManagement
 
             BeginTest();
 
-            cart.RemoveFromCart(removedProduct);
+            cart.RemoveProduct(removedProduct);
 
             var items = cart.GetCartItems();
 

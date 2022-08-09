@@ -39,19 +39,19 @@ namespace Gazel.Tutorial.Test.ProductManagement
 
             if (!empty)
             {
-                cart.AddToCart(CreateProduct());
-                cart.AddToCart(CreateProduct());
-                cart.AddToCart(CreateProduct());
+                cart.AddProduct(CreateProduct());
+                cart.AddProduct(CreateProduct());
+                cart.AddProduct(CreateProduct());
             }
 
             foreach (var product in products)
             {
-                cart.AddToCart(product);
+                cart.AddProduct(product);
             }
 
             if (purchased)
             {
-                cart.CompletePurchase();
+                cart.Purchase();
             }
 
             return cart;

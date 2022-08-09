@@ -10,10 +10,10 @@
 
     public interface ICartService
     {
-        void AddToCart(Product product, int amount);
-        void RemoveFromCart(Product product);
+        void AddProduct(Product product, int amount);
+        void RemoveProduct(Product product);
         void RemoveAllProducts();
-        PurchaseRecord CompletePurchase();
+        PurchaseRecord Purchase();
 
     }
 

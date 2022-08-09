@@ -32,24 +32,31 @@ namespace Gazel.Tutorial.Module.ProductManagement
             return this;
         }
 
-        public virtual void AddToCart(Product product, int amount = 1)
+        public virtual List<CartItem> GetCartItems() => context.Query<CartItems>().ByCart(this);
+
+        protected virtual void ValidateNotPurchased()
         {
             if (PurchaseComplete) throw new Exception("Cannot modify cart after being purchased");
+        }
+
+        public virtual void AddProduct(Product product, int amount = 1)
+        {
+            ValidateNotPurchased();
 
             var item = context.Query<CartItems>().SingleBy(this, product) ??
-                       context.New<CartItem>().With(product, this);
+                       context.New<CartItem>().With(this, product);
 
             item.IncreaseAmount(amount);
 
             TotalCost += item.Price;
         }
 
-        public virtual void RemoveFromCart(Product product)
+        public virtual void RemoveProduct(Product product)
         {
-            if (PurchaseComplete) throw new Exception("Cannot modify cart after being purchased");
+            ValidateNotPurchased();
 
-            var item = context.Query<CartItems>().SingleBy(this, product);
-            if (item == null) throw new Exception("Product not found in cart");
+            var item = context.Query<CartItems>().SingleBy(this, product) ??
+                       throw new Exception("Product not found in cart");
 
             TotalCost -= item.Price;
             item.Delete();
@@ -57,7 +64,7 @@ namespace Gazel.Tutorial.Module.ProductManagement
 
         public virtual void RemoveAllProducts()
         {
-            if (PurchaseComplete) throw new Exception("Cannot modify cart after being purchased");
+            ValidateNotPurchased();
 
             foreach (var item in context.Query<CartItems>().ByCart(this))
             {
@@ -67,14 +74,10 @@ namespace Gazel.Tutorial.Module.ProductManagement
             TotalCost = default;
         }
 
-        public virtual List<CartItem> GetCartItems()
+        public virtual PurchaseRecord Purchase()
         {
-            return context.Query<CartItems>().ByCart(this);
-        }
+            ValidateNotPurchased();
 
-        public virtual PurchaseRecord CompletePurchase()
-        {
-            if (PurchaseComplete) throw new Exception("Purchase could not be completed. This cart has already completed a purchase before");
             if (!context.Query<CartItems>().AnyByCart(this)) throw new Exception("Cart is empty");
 
             foreach (var item in context.Query<CartItems>().ByCart(this))
@@ -87,33 +90,18 @@ namespace Gazel.Tutorial.Module.ProductManagement
             return context.New<PurchaseRecord>().With(this);
         }
 
-        public virtual PurchaseRecord GetPurchaseRecord()
-        {
-            return context.Query<PurchaseRecords>().SingleByCart(this);
-        }
+        public virtual PurchaseRecord GetPurchaseRecord() => context.Query<PurchaseRecords>().SingleByCart(this);
     }
 
     public class Carts : Query<Cart>, ICartsService
     {
         public Carts(IModuleContext context) : base(context) { }
 
-        public Cart SingleByUserName(string userName)
-        {
-            return SingleBy(t => t.UserName == userName);
-        }
+        public Cart SingleByUserName(string userName) => SingleBy(t => t.UserName == userName);
+        public List<Cart> NotEmpty() => By(t => t.TotalCost > 0);
 
-        public List<Cart> NotEmpty()
-        {
-            return By(t => t.TotalCost > 0);
-        }
-
-        ICartInfo ICartsService.GetCart(Cart cart) =>
-            SingleById(cart.Id);
-
-        ICartInfo ICartsService.GetCartWithName(string name) =>
-            SingleByUserName(name);
-
-        List<ICartInfo> ICartsService.GetNonEmptyCarts() =>
-            NotEmpty().Cast<ICartInfo>().ToList();
+        ICartInfo ICartsService.GetCart(Cart cart) => SingleById(cart.Id);
+        ICartInfo ICartsService.GetCartWithName(string name) => SingleByUserName(name);
+        List<ICartInfo> ICartsService.GetNonEmptyCarts() => NotEmpty().Cast<ICartInfo>().ToList();
     }
 }

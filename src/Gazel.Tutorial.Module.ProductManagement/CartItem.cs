@@ -13,16 +13,16 @@ namespace Gazel.Tutorial.Module.ProductManagement
         }
 
         public virtual int Id { get; protected set; }
+        public virtual Cart Cart { get; protected set; }
         public virtual int Amount { get; protected set; }
         public virtual Product Product { get; protected set; }
-        public virtual Cart Cart { get; protected set; }
 
         public virtual Money Price => Amount * Product.Price;
 
-        protected internal virtual CartItem With(Product product, Cart cart)
+        protected internal virtual CartItem With(Cart cart, Product product)
         {
-            Product = product;
             Cart = cart;
+            Product = product;
             Amount = 0;
 
             repository.Insert(this);

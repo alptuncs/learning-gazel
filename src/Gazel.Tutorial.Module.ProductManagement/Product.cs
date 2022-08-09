@@ -50,13 +50,12 @@ namespace Gazel.Tutorial.Module.ProductManagement
             if (price.IsDefault()) throw new Exception("price cannot be null");
 
             var result = context.New<Product>().With(Name, price, Stock);
+            Stock = 0;
 
             foreach (var item in context.Query<CartItems>().By(this, purchaseComplete: false))
             {
                 item.UpdateProduct(result);
             }
-
-            Stock = 0;
 
             return result;
         }
@@ -65,7 +64,7 @@ namespace Gazel.Tutorial.Module.ProductManagement
         {
             foreach (var item in context.Query<CartItems>().By(this, purchaseComplete: false))
             {
-                item.Cart.RemoveFromCart(this);
+                item.Cart.RemoveProduct(this);
             }
 
             Available = false;

@@ -22,38 +22,53 @@ namespace Gazel.Tutorial.Module.ProductManagement
         public virtual string ProductName { get; protected set; }
         public virtual float Price { get; protected set; }
         public virtual int Stock { get; protected set; }
+        public virtual bool Avalible { get; protected set; }
 
-        protected internal virtual Product With(string name, float price, int stock)
+        protected internal virtual Product With(string name, float price, int stock, bool avalible = true)
         {
             ProductName = name;
             Price = price;
             Stock = stock;
+            Avalible = avalible;
 
             repository.Insert(this);
 
             return this;
         }
-        public virtual void UpdateProduct(string name = null, float price = default(float), int stock = default(int))
+
+        public virtual void UpdateProductStock(int stock)
+        {
+            Stock = stock;
+        }
+
+        public virtual Product UpdateProductInfo(string name = null, float price = default(float), int stock = default(int))
         {
             if (name.IsNullOrWhiteSpace()) name = ProductName;
             if (price.IsDefault()) price = Price;
             if (stock.IsDefault()) stock = Stock;
 
-            ProductName = name;
-            Price = price;
-            Stock = stock;
+            var newProduct = context.New<Product>().With(name, price, stock);
+
+            context.Query<CartItems>().ByPurchaseComplete(false).ForEach(t => t.UpdateProduct(newProduct));
+
+            return newProduct;
         }
 
         public virtual void RemoveProduct()
         {
             context.Query<CartItems>().ByProduct(this).ForEach(t => t.Cart.RemoveFromCart(this));
-            repository.Delete(this);
+            Avalible = false;
         }
     }
 
     public class Products : Query<Product>, IProductsService
     {
         public Products(IModuleContext context) : base(context) { }
+
+        public List<Product> ByAvalible(bool avalible)
+        {
+            return By(t => t.Avalible == avalible);
+        }
 
         public List<Product> ByName(string name)
         {

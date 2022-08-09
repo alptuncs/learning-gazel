@@ -20,10 +20,12 @@ namespace Gazel.Tutorial.Module.ProductManagement
         public virtual int Id { get; protected set; }
         public virtual string UserName { get; protected set; }
         public virtual float TotalCost { get; protected set; }
+        public virtual bool PurchaseComplete { get; protected set; }
 
-        protected internal virtual Cart With(string userName)
+        protected internal virtual Cart With(string userName, bool purchaseComplete = false)
         {
             UserName = userName;
+            PurchaseComplete = purchaseComplete;
             TotalCost = 0;
 
             repository.Insert(this);
@@ -31,8 +33,10 @@ namespace Gazel.Tutorial.Module.ProductManagement
             return this;
         }
 
-        public virtual void AddToCart(Product product, int amount)
+        public virtual void AddToCart(Product product, int amount = 1)
         {
+            if (PurchaseComplete) return;
+
             if (amount > product.Stock) throw new Exception($"There are {product.Stock} amount of products in stock, can't add {amount} amount to your cart");
 
             if (context.Query<CartItems>().SingleBy(this, product) != null)
@@ -48,25 +52,9 @@ namespace Gazel.Tutorial.Module.ProductManagement
             TotalCost += product.Price * amount;
         }
 
-        public virtual void AddToCart(Product product)
-        {
-            if (product.Stock == 0) throw new Exception($"There are {product.Stock} amount of products in stock, can't add product to your cart");
-
-            if (context.Query<CartItems>().SingleBy(this, product) != null)
-            {
-                var cartItem = context.Query<CartItems>().SingleBy(this, product);
-                cartItem.UpdateCartItem(cartItem.Amount + 1);
-            }
-            else
-            {
-                context.New<CartItem>().With(product, this, 1);
-            }
-
-            TotalCost += product.Price;
-        }
-
         public virtual void RemoveFromCart(Product product)
         {
+            if (PurchaseComplete) return;
             var cartItem = context.Query<CartItems>().SingleBy(this, product);
             TotalCost -= product.Price * cartItem.Amount;
             cartItem.RemoveCartItem();
@@ -74,14 +62,9 @@ namespace Gazel.Tutorial.Module.ProductManagement
 
         public virtual void RemoveAllProducts()
         {
+            if (PurchaseComplete) return;
             context.Query<CartItems>().ByCart(this).ForEach(t => t.RemoveCartItem());
             TotalCost = 0;
-        }
-
-        public virtual void DeleteCart()
-        {
-            RemoveAllProducts();
-            repository.Delete(this);
         }
 
         public virtual List<CartItem> GetCartItems()
@@ -91,28 +74,27 @@ namespace Gazel.Tutorial.Module.ProductManagement
 
         public virtual PurchaseRecord CompletePurchase()
         {
+            if (PurchaseComplete) throw new Exception("This is a purchase record");
+
             if (context.Query<CartItems>().ByCart(this) == null) throw new Exception("Cart is empty");
 
             var purchaseRecord = context.New<PurchaseRecord>().With(this);
 
-            UpdateProductStock(context.Query<CartItems>().ByCart(this));
-            TotalCost = 0;
+            context.Query<CartItems>().ByCart(this).ForEach(t => UpdateProductStock(t));
+
+            PurchaseComplete = true;
 
             return purchaseRecord;
         }
 
-        public virtual void UpdateProductStock(List<CartItem> cartItems)
+        public virtual void UpdateProductStock(CartItem item)
         {
-            foreach (var item in cartItems)
-            {
-                item.Product.UpdateProduct(null, default(float), item.Product.Stock - item.Amount);
-                item.RemoveCartItem();
-            }
+            item.Product.UpdateProductStock(item.Product.Stock - item.Amount);
         }
 
-        public virtual List<PurchaseRecord> GetPurchaseRecords()
+        public virtual PurchaseRecord GetPurchaseRecord()
         {
-            return context.Query<PurchaseRecords>().ByCart(this);
+            return context.Query<PurchaseRecords>().SingleByCart(this);
         }
     }
     public class Carts : Query<Cart>, ICartsService
@@ -124,7 +106,7 @@ namespace Gazel.Tutorial.Module.ProductManagement
             return SingleBy(t => t.UserName == userName);
         }
 
-        public List<Cart> ByNotEmpty()
+        public List<Cart> NotEmpty()
         {
             return By(t => t.TotalCost > 0);
         }
@@ -136,7 +118,7 @@ namespace Gazel.Tutorial.Module.ProductManagement
             SingleByUserName(name);
 
         List<ICartInfo> ICartsService.GetNonEmptyCarts() =>
-            ByNotEmpty().Cast<ICartInfo>().ToList();
+            NotEmpty().Cast<ICartInfo>().ToList();
     }
 }
 

@@ -10,7 +10,7 @@
     public interface IPurchaseRecordsService
     {
         IPurchaseRecordInfo GetRecordInfo(PurchaseRecord purchaseRecord);
-        List<IPurchaseRecordInfo> GetPurchaseRecordsWithCart(Cart cart);
+        IPurchaseRecordInfo GetPurchaseRecordsWithCart(Cart cart);
         List<IPurchaseRecordInfo> GetPurchaseRecordsWithinTotalCostRange(int lowerBound, int upperBound);
         List<IPurchaseRecordInfo> GetPurchaseRecordsWithingDateTimeRange(DateTime startDate, DateTime endDate);
     }

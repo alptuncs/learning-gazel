@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Inventiv.Todo.App.Service
+namespace Gazel.Tutorial.App.Service
 {
     public class Program
     {

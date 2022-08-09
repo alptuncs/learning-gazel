@@ -30,6 +30,11 @@ namespace Gazel.Tutorial.Module.ProductManagement
             return this;
         }
 
+        public virtual void UpdateProduct(Product product)
+        {
+            Product = product;
+        }
+
         public virtual void UpdateCartItem(int amount)
         {
             Amount = amount;
@@ -49,6 +54,11 @@ namespace Gazel.Tutorial.Module.ProductManagement
         public List<CartItem> ByCart(Cart cart)
         {
             return By(t => t.Cart == cart);
+        }
+
+        public List<CartItem> ByPurchaseComplete(bool purchaseComplete)
+        {
+            return By(t => t.Cart.PurchaseComplete == purchaseComplete);
         }
 
         public List<CartItem> ByProduct(Product product)

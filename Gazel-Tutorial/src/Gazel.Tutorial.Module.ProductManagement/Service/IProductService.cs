@@ -10,7 +10,7 @@
 
     public interface IProductService
     {
-        void UpdateProduct(string name = null, float price = default(float), int stock = default(int));
+        Product UpdateProductInfo(string name = null, float price = default(float), int stock = default(int));
         void RemoveProduct();
     }
 
@@ -20,5 +20,11 @@
         List<IProductInfo> GetProductsWithPositiveStock();
         List<IProductInfo> GetProductsWithName(string name);
         List<IProductInfo> GetProductsWithinPriceRange(float lowerBound, float upperBound);
+    }
+
+    public interface IProductManagerService
+    {
+        Product CreateProduct(string name, float price, int stock);
+        Cart CreateCart(string userName);
     }
 }

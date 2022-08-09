@@ -3,7 +3,7 @@ using Gazel.Tutorial.Module.ProductManagement.Service;
 
 namespace Gazel.Tutorial.Module.ProductManagement
 {
-    public class ProductManager
+    public class ProductManager : IProductManagerService
     {
         private readonly IModuleContext context;
 

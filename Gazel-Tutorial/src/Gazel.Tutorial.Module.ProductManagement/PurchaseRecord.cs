@@ -53,9 +53,9 @@ namespace Gazel.Tutorial.Module.ProductManagement
             return ByStartDate(startDate).Intersect(ByEndDate(endDate)).ToList();
         }
 
-        public List<PurchaseRecord> ByCart(Cart cart)
+        public PurchaseRecord SingleByCart(Cart cart)
         {
-            return By(t => t.Cart == cart);
+            return SingleBy(t => t.Cart == cart);
         }
 
         public List<PurchaseRecord> ByLowerBound(int lowerBound)
@@ -76,8 +76,8 @@ namespace Gazel.Tutorial.Module.ProductManagement
         IPurchaseRecordInfo IPurchaseRecordsService.GetRecordInfo(PurchaseRecord purchaseRecord) =>
             SingleById(purchaseRecord.Id);
 
-        List<IPurchaseRecordInfo> IPurchaseRecordsService.GetPurchaseRecordsWithCart(Cart cart) =>
-            ByCart(cart).Cast<IPurchaseRecordInfo>().ToList();
+        IPurchaseRecordInfo IPurchaseRecordsService.GetPurchaseRecordsWithCart(Cart cart) =>
+            SingleByCart(cart);
 
         List<IPurchaseRecordInfo> IPurchaseRecordsService.GetPurchaseRecordsWithinTotalCostRange(int lowerBound, int upperBound) =>
             By(lowerBound, upperBound).Cast<IPurchaseRecordInfo>().ToList();

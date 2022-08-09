@@ -5,15 +5,16 @@
         int Id { get; }
         string UserName { get; }
         float TotalCost { get; }
+        bool PurchaseComplete { get; }
     }
 
     public interface ICartService
     {
         void AddToCart(Product product, int amount);
-        void AddToCart(Product product);
         void RemoveFromCart(Product product);
         void RemoveAllProducts();
-        void DeleteCart();
+        PurchaseRecord CompletePurchase();
+
     }
     public interface ICartsService
     {

@@ -17,7 +17,7 @@ namespace Inventiv.ToDo.Test.UnitTest.TaskManagement
             var purchase = cart.CompletePurchase();
 
             Verify.ObjectIsPersisted(purchase);
-            Assert.IsNotEmpty(cart.GetPurchaseRecords());
+            Assert.AreEqual(cart, cart.GetPurchaseRecord().Cart);
         }
 
         public void GIVEN_there_exists_a_cart__WHEN_user_completes_purchase__THEN_product_stock_is_updated()

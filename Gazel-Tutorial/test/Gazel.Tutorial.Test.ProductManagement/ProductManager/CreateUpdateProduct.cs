@@ -24,17 +24,14 @@ namespace Inventiv.ToDo.Test.UnitTest.TaskManagement
         public void GIVEN_there_exists_a_product__WHEN_user_updates_product_name__Then_name_changes_but_product_price_and_stock_does_not_change(string name)
         {
             var product = CreateProduct();
-            var price = product.Price;
-            var stock = product.Stock;
-            var productName = product.ProductName;
 
             BeginTest();
 
-            product.UpdateProduct(name);
+            var actual = product.UpdateProductInfo(name);
 
-            Assert.AreNotEqual(productName, product.ProductName, "ProductName has not changed");
-            Assert.AreEqual(price, product.Price, "Price has changed");
-            Assert.AreEqual(stock, product.Stock, "Stock has changed");
+            Assert.AreNotEqual(actual.ProductName, product.ProductName, "ProductName has not changed");
+            Assert.AreEqual(actual.Price, product.Price, "Price has changed");
+            Assert.AreEqual(actual.Stock, product.Stock, "Stock has changed");
         }
 
         [TestCase(null)]
@@ -43,13 +40,12 @@ namespace Inventiv.ToDo.Test.UnitTest.TaskManagement
         public void GIVEN_there_exists_a_product__WHEN_user_updates_product_name_with_empty_name_or_null__THEN_product_name_does_not_change(string name)
         {
             var product = CreateProduct();
-            var productName = product.ProductName;
 
             BeginTest();
 
-            product.UpdateProduct(name);
+            var actual = product.UpdateProductInfo(name);
 
-            Assert.AreEqual(productName, product.ProductName, "Product name has changed, when it shouldn't have");
+            Assert.AreEqual(actual.ProductName, product.ProductName, "Product name has changed, when it shouldn't have");
         }
     }
 }

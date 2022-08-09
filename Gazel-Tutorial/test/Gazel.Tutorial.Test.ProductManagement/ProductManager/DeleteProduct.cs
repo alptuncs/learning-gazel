@@ -21,7 +21,7 @@ namespace Inventiv.ToDo.Test.UnitTest.TaskManagement
 
             product.RemoveProduct();
 
-            Verify.ObjectIsDeleted(product);
+
             Assert.IsEmpty(firstCart.GetCartItems(), "Product did not get removed from first cart");
             Assert.IsEmpty(secondCart.GetCartItems(), "Product did not get removed from first cart");
         }

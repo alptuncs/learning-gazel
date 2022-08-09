@@ -1,4 +1,5 @@
 ﻿using Gazel.Tutorial.Module.ProductManagement;
+using Gazel.Tutorial.Module.ProductManagement.Service;
 using Gazel.UnitTesting;
 using NUnit.Framework;
 

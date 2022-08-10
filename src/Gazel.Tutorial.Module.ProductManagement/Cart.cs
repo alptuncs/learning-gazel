@@ -23,6 +23,8 @@ namespace Gazel.Tutorial.Module.ProductManagement
 
         protected internal virtual Cart With(string userName, bool purchaseComplete = false)
         {
+            if (userName.IsNullOrWhiteSpace()) throw new Exception("User Name can't be empty");
+
             UserName = userName;
             PurchaseComplete = purchaseComplete;
             TotalCost = default;
@@ -47,8 +49,6 @@ namespace Gazel.Tutorial.Module.ProductManagement
                        context.New<CartItem>().With(this, product);
 
             item.IncreaseAmount(amount);
-
-            TotalCost += item.Price;
         }
 
         public virtual void RemoveProduct(Product product)
@@ -58,7 +58,6 @@ namespace Gazel.Tutorial.Module.ProductManagement
             var item = context.Query<CartItems>().SingleBy(this, product) ??
                        throw new Exception("Product not found in cart");
 
-            TotalCost -= item.Price;
             item.Delete();
         }
 
@@ -70,8 +69,6 @@ namespace Gazel.Tutorial.Module.ProductManagement
             {
                 item.Delete();
             }
-
-            TotalCost = default;
         }
 
         public virtual PurchaseRecord Purchase()
@@ -80,8 +77,9 @@ namespace Gazel.Tutorial.Module.ProductManagement
 
             if (!context.Query<CartItems>().AnyByCart(this)) throw new Exception("Cart is empty");
 
-            foreach (var item in context.Query<CartItems>().ByCart(this))
+            foreach (var item in GetCartItems())
             {
+                TotalCost += item.Price;
                 item.Product.DecreaseStock(item.Amount);
             }
 
@@ -97,8 +95,8 @@ namespace Gazel.Tutorial.Module.ProductManagement
     {
         public Carts(IModuleContext context) : base(context) { }
 
-        public Cart SingleByUserName(string userName) => SingleBy(t => t.UserName == userName);
-        public List<Cart> NotEmpty() => By(t => t.TotalCost > 0);
+        internal Cart SingleByUserName(string userName) => SingleBy(t => t.UserName == userName);
+        internal List<Cart> NotEmpty() => By(t => t.TotalCost > 0);
 
         ICartInfo ICartsService.GetCart(Cart cart) => SingleById(cart.Id);
         ICartInfo ICartsService.GetCartWithName(string name) => SingleByUserName(name);

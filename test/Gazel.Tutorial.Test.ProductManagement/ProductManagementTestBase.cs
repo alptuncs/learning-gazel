@@ -19,11 +19,16 @@ namespace Gazel.Tutorial.Test.ProductManagement
             productManager = Context.Get<ProductManager>();
         }
 
-        protected Product CreateProduct(string name = "Test Product", Money price = default, int stock = int.MaxValue)
+        protected Product CreateProduct(string name = "Test Product", Money price = default, int stock = int.MaxValue, bool available = true)
         {
             if (price.IsDefault()) price = 10.TRY();
 
             var product = Context.Get<ProductManager>().CreateProduct(name, price, stock);
+
+            if (!available)
+            {
+                product.MakeUnavailable();
+            }
 
             return product;
         }
@@ -32,6 +37,7 @@ namespace Gazel.Tutorial.Test.ProductManagement
             string userName = "Test User",
             bool empty = true,
             bool purchased = false,
+            bool haveMoreThanStock = false,
             params Product[] products
         )
         {
@@ -39,14 +45,21 @@ namespace Gazel.Tutorial.Test.ProductManagement
 
             if (!empty)
             {
-                cart.AddProduct(CreateProduct());
-                cart.AddProduct(CreateProduct());
-                cart.AddProduct(CreateProduct());
+                cart.AddProduct(CreateProduct(name: "first"));
+                cart.AddProduct(CreateProduct(name: "second"));
+                cart.AddProduct(CreateProduct(name: "third"));
             }
 
             foreach (var product in products)
             {
-                cart.AddProduct(product);
+                if (haveMoreThanStock)
+                {
+                    cart.AddProduct(product, product.Stock + 1);
+                }
+                else
+                {
+                    cart.AddProduct(product);
+                }
             }
 
             if (purchased)

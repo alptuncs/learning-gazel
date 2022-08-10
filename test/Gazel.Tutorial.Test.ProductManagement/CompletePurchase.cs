@@ -28,15 +28,14 @@ namespace Gazel.Tutorial.Test.ProductManagement
 
             cart.Purchase();
 
-            Assert.AreNotEqual(1, product.Stock, $"product stock = {product.Stock}");
+            Assert.AreEqual(0, product.Stock);
         }
 
         [Test]
-        public void GIVEN_there_exists_a_product__WHEN_user_adds_more_than_stock_to_cart__THEN_system_gives_an_error()
+        public void GIVEN_there_exists_a_product_with_higher_amount_than_stock_in_cart__WHEN_user_tries_to_purchase__THEN_system_gives_an_error()
         {
             var product = CreateProduct(stock: 20);
-            var cart = CreateCart();
-            cart.AddProduct(product, 21);
+            var cart = CreateCart(haveMoreThanStock: true, products: new[] { product });
 
             BeginTest();
 

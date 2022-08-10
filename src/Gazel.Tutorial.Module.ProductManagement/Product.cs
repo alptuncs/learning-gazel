@@ -23,6 +23,11 @@ namespace Gazel.Tutorial.Module.ProductManagement
 
         protected internal virtual Product With(string name, Money price, int stock, bool avalible = true)
         {
+            if (stock < 0) throw new Exception("Stock can't be negative");
+            if (price <= 0) throw new Exception("Price can't be negative or 0");
+            if (name.IsNullOrWhiteSpace()) throw new Exception("Name can't be empty");
+            if (context.Query<Products>().AnyBy(name, true)) throw new Exception("Product is already added");
+
             Name = name;
             Price = price;
             Stock = stock;
@@ -49,6 +54,8 @@ namespace Gazel.Tutorial.Module.ProductManagement
         {
             if (price.IsDefault()) throw new Exception("price cannot be null");
 
+            Available = false;
+
             var result = context.New<Product>().With(Name, price, Stock);
             Stock = 0;
 
@@ -60,7 +67,7 @@ namespace Gazel.Tutorial.Module.ProductManagement
             return result;
         }
 
-        public virtual void RemoveProduct()
+        public virtual void MakeUnavailable()
         {
             foreach (var item in context.Query<CartItems>().By(this, purchaseComplete: false))
             {
@@ -75,25 +82,15 @@ namespace Gazel.Tutorial.Module.ProductManagement
     {
         public Products(IModuleContext context) : base(context) { }
 
-        public List<Product> ByAvailable(bool available)
-        {
-            return By(t => t.Available == available);
-        }
+        internal List<Product> ByAvailable(bool available) => By(t => t.Available == available);
 
-        public List<Product> ByName(string name)
-        {
-            return By(t => t.Name == name);
-        }
+        internal bool AnyBy(string name, bool available) => AnyBy(t => t.Name == name && t.Available == available);
 
-        public List<Product> ByPositiveStock()
-        {
-            return By(t => t.Stock > 0);
-        }
+        internal List<Product> ByName(string name) => By(t => t.Name == name);
 
-        public List<Product> ByPriceRange(MoneyRange priceRange)
-        {
-            return By(t => t.Price >= priceRange.Start && t.Price <= priceRange.End);
-        }
+        internal List<Product> ByPositiveStock() => By(t => t.Stock > 0);
+
+        internal List<Product> ByPriceRange(MoneyRange priceRange) => By(t => t.Price >= priceRange.Start && t.Price <= priceRange.End);
 
         IProductInfo IProductsService.GetProduct(Product product) =>
             SingleById(product.Id);

@@ -40,8 +40,8 @@ namespace Gazel.Tutorial.Test.ProductManagement
         [Test]
         public void GIVEN_there_exists_a_product_in_cart__WHEN_user_removes_product_from_cart__THEN_product_is_removed_from_cart()
         {
-            var removedProduct = CreateProduct();
-            var leftProduct = CreateProduct();
+            var removedProduct = CreateProduct(name: "removed");
+            var leftProduct = CreateProduct(name: "left");
             var cart = CreateCart(products: new[] { removedProduct, leftProduct });
 
             BeginTest();

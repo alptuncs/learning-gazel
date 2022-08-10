@@ -5,6 +5,7 @@ namespace Gazel.Tutorial.Test.ProductManagement
     [TestFixture]
     public class CreateUpdateProduct : ProductManagementTestBase
     {
+
         [Test]
         public void GIVEN_there_are_no_products__WHEN_user_creates_a_product_with_name__price_and_stock__THEN_the_product_is_created()
         {
@@ -16,6 +17,55 @@ namespace Gazel.Tutorial.Test.ProductManagement
             Assert.AreEqual("Çerezza", actual.Name);
             Assert.AreEqual(3.TRY(), actual.Price);
             Assert.AreEqual(100, actual.Stock);
+        }
+
+        [Test]
+        public void GIVEN_there_are_no_products__WHEN_user_creates_a_product_with_negative_stock__THEN_the_system_gives_an_error()
+        {
+            BeginTest();
+
+            Assert.Throws<Exception>(() => CreateProduct(stock: -1));
+        }
+
+        [TestCase(0)]
+        [TestCase(-1)]
+        public void GIVEN_there_are_no_products__WHEN_user_creates_a_product_with_non_positive_price__THEN_the_system_gives_an_error(int nonPositivePrice)
+        {
+            BeginTest();
+
+            Assert.Throws<Exception>(() => CreateProduct(price: nonPositivePrice.TRY()));
+        }
+
+        [TestCase(null)]
+        [TestCase(" ")]
+        public void GIVEN_there_are_no_products__WHEN_user_creates_a_product_with_null_or_white_space_name__THEN_the_system_gives_an_error(string nullOrWhiteSpace)
+        {
+            BeginTest();
+
+            Assert.Throws<Exception>(() => CreateProduct(name: nullOrWhiteSpace));
+        }
+
+        [Test]
+        public void GIVEN_there_exists_an_available_product__WHEN_user_creates_a_product_with_same_name__THEN_the_system_gives_an_error()
+        {
+            var availableProduct = CreateProduct(name: "availableProduct", available: true);
+
+            BeginTest();
+
+            Assert.Throws<Exception>(() => CreateProduct(name: "availableProduct"));
+        }
+
+        [Test]
+        public void GIVEN_there_exists_an_unavailable_product__WHEN_user_creates_a_product_with_same_name__THEN_the_product_is_created()
+        {
+            var unavailableProduct = CreateProduct(name: "unavailableProduct", available: false);
+
+            BeginTest();
+
+            var actual = CreateProduct(name: "unavailableProduct");
+
+            Verify.ObjectIsPersisted(actual);
+            Assert.AreEqual(unavailableProduct.Name, actual.Name);
         }
 
         [Test]

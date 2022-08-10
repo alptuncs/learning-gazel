@@ -6,23 +6,19 @@ namespace Gazel.Tutorial.Test.ProductManagement
     public class DeleteProduct : ProductManagementTestBase
     {
         [Test]
-        public void GIVEN_there_exists_a_product__WHEN_product_is_deleted__THEN_product_is_deleted_and_removed_from_any_cart_that_contains_the_product()
+        public void GIVEN_there_exists_a_product_within_carts__WHEN_product_is_made_unavailable__THEN_it_is_only_removed_from_non_purchased_carts()
         {
             var product = CreateProduct();
-
-            var firstCart = CreateCart("firstCart");
-            var secondCart = CreateCart("secondCart");
-
-            firstCart.AddProduct(product);
-            secondCart.AddProduct(product);
+            var cart = CreateCart(purchased: false, products: new[] { product });
+            var purchased = CreateCart(purchased: true, products: new[] { product });
 
             BeginTest();
 
-            product.RemoveProduct();
+            product.MakeUnavailable();
 
-
-            Assert.IsEmpty(firstCart.GetCartItems(), "Product did not get removed from first cart");
-            Assert.IsEmpty(secondCart.GetCartItems(), "Product did not get removed from first cart");
+            Assert.IsEmpty(cart.GetCartItems());
+            Assert.AreEqual(product, purchased.GetCartItems().First().Product);
         }
     }
 }
+

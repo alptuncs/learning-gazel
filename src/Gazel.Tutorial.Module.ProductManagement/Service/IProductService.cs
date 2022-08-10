@@ -11,7 +11,7 @@
     public interface IProductService
     {
         Product RevisePrice(Money price = default);
-        void RemoveProduct();
+        void MakeUnavailable();
     }
 
     public interface IProductsService

@@ -34,8 +34,7 @@ namespace Gazel.Tutorial.Test.ProductManagement
         [Test]
         public void GIVEN_there_exists_a_product_with_higher_amount_than_stock_in_cart__WHEN_user_tries_to_purchase__THEN_system_gives_an_error()
         {
-            var product = CreateProduct(stock: 20);
-            var cart = CreateCart(haveMoreThanStock: true, products: new[] { product });
+            var cart = CreateCart(withAProductMoreThanItsStock: true);
 
             BeginTest();
 

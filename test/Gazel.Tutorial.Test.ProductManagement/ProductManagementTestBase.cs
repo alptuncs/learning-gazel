@@ -37,7 +37,7 @@ namespace Gazel.Tutorial.Test.ProductManagement
             string userName = "Test User",
             bool empty = true,
             bool purchased = false,
-            bool haveMoreThanStock = false,
+            bool withAProductMoreThanItsStock = false,
             params Product[] products
         )
         {
@@ -50,16 +50,16 @@ namespace Gazel.Tutorial.Test.ProductManagement
                 cart.AddProduct(CreateProduct(name: "third"));
             }
 
+            if (withAProductMoreThanItsStock)
+            {
+                var product = CreateProduct(name: "productWithInsufficientStock", stock: 10);
+                cart.AddProduct(product, product.Stock + 1);
+
+            }
+
             foreach (var product in products)
             {
-                if (haveMoreThanStock)
-                {
-                    cart.AddProduct(product, product.Stock + 1);
-                }
-                else
-                {
-                    cart.AddProduct(product);
-                }
+                cart.AddProduct(product);
             }
 
             if (purchased)

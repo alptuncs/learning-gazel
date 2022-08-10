@@ -80,7 +80,8 @@ namespace Gazel.Tutorial.Module.ProductManagement
 
     public class Products : Query<Product>, IProductsService
     {
-        public Products(IModuleContext context) : base(context) { }
+        public Products(IModuleContext context)
+            : base(context) { }
 
         internal List<Product> ByAvailable(bool available) => By(t => t.Available == available);
 
@@ -88,7 +89,7 @@ namespace Gazel.Tutorial.Module.ProductManagement
 
         internal List<Product> ByName(string name) => By(t => t.Name == name);
 
-        internal List<Product> ByPositiveStock() => By(t => t.Stock > 0);
+        internal List<Product> ByStock(int min = 0, int max = int.MaxValue) => By(t => t.Stock > min && t.Stock <= max);
 
         internal List<Product> ByPriceRange(MoneyRange priceRange) => By(t => t.Price >= priceRange.Start && t.Price <= priceRange.End);
 
@@ -96,7 +97,7 @@ namespace Gazel.Tutorial.Module.ProductManagement
             SingleById(product.Id);
 
         List<IProductInfo> IProductsService.GetProductsWithPositiveStock() =>
-            ByPositiveStock().Cast<IProductInfo>().ToList();
+            ByStock().Cast<IProductInfo>().ToList();
 
         List<IProductInfo> IProductsService.GetProductsWithinPriceRange(MoneyRange range) =>
             ByPriceRange(range).Cast<IProductInfo>().ToList();

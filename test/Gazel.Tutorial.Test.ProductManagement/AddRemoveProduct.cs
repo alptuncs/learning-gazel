@@ -8,7 +8,7 @@ namespace Gazel.Tutorial.Test.ProductManagement
         [Test]
         public void GIVEN_there_exists_a_product_and_a_cart_WHEN_user_adds_the_product_to_the_cart__THEN_the_product_shows_up_in_cart_with_the_amount_of_one()
         {
-            var product = CreateProduct();
+            var product = CreateRandomProduct();
             var cart = CreateCart();
 
             BeginTest();
@@ -25,7 +25,7 @@ namespace Gazel.Tutorial.Test.ProductManagement
         [Test]
         public void GIVEN_there_exists_a_product_and_a_cart__WHEN_user_specifies_amount_while_adding_the_product__THEN_product_is_added_to_cart_with_the_given_amount()
         {
-            var product = CreateProduct();
+            var product = CreateRandomProduct();
             var cart = CreateCart();
 
             BeginTest();
@@ -40,8 +40,8 @@ namespace Gazel.Tutorial.Test.ProductManagement
         [Test]
         public void GIVEN_there_exists_a_product_in_cart__WHEN_user_removes_product_from_cart__THEN_product_is_removed_from_cart()
         {
-            var removedProduct = CreateProduct(name: "removed");
-            var leftProduct = CreateProduct(name: "left");
+            var removedProduct = CreateRandomProduct();
+            var leftProduct = CreateRandomProduct();
             var cart = CreateCart(products: new[] { removedProduct, leftProduct });
 
             BeginTest();

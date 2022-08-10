@@ -71,17 +71,19 @@ namespace Gazel.Tutorial.Test.ProductManagement
         [Test]
         public void GIVEN_there_exists_a_product_within_carts__WHEN_its_price_is_revised_THEN_new_price_should_be_reflected_to_all_unpurchased_carts()
         {
-            var product = CreateProduct(price: 3.TRY());
+            var product = CreateRandomProduct();
             var unpurchased = CreateCart(products: new[] { product });
             var purchased = CreateCart(purchased: true, products: new[] { product });
 
             BeginTest();
 
-            var actual = product.RevisePrice(4.TRY());
+            var newPrice = product.Price + 1.TRY();
+            var actual = product.RevisePrice(newPrice);
 
-            Assert.AreEqual(4.TRY(), actual.Price);
-            Assert.AreEqual(4.TRY(), unpurchased.GetCartItems().First().Product.Price);
-            Assert.AreEqual(3.TRY(), purchased.GetCartItems().First().Product.Price);
+
+            Assert.AreEqual(newPrice, actual.Price);
+            Assert.AreEqual(newPrice, unpurchased.GetCartItems().First().Product.Price);
+            Assert.AreEqual(product.Price, purchased.GetCartItems().First().Product.Price);
         }
     }
 }

@@ -19,7 +19,12 @@ namespace Gazel.Tutorial.Test.ProductManagement
             productManager = Context.Get<ProductManager>();
         }
 
-        protected Product CreateProduct(string name = "Test Product", Money price = default, int stock = int.MaxValue, bool available = true)
+        protected Product CreateProduct(
+            string name = "Test Product",
+            Money price = default,
+            int stock = int.MaxValue,
+            bool available = true
+            )
         {
             if (price.IsDefault()) price = 10.TRY();
 
@@ -31,6 +36,16 @@ namespace Gazel.Tutorial.Test.ProductManagement
             }
 
             return product;
+        }
+
+        protected Product CreateRandomProduct(bool zeroStock = false)
+        {
+            var randGen = new Random();
+            var name = Guid.NewGuid().ToString();
+            var price = randGen.Next(10, 30).TRY();
+            var stock = zeroStock ? 0 : randGen.Next(1, 30);
+
+            return CreateProduct(name, price, stock);
         }
 
         protected Cart CreateCart(
@@ -45,14 +60,14 @@ namespace Gazel.Tutorial.Test.ProductManagement
 
             if (!empty)
             {
-                cart.AddProduct(CreateProduct(name: "first"));
-                cart.AddProduct(CreateProduct(name: "second"));
-                cart.AddProduct(CreateProduct(name: "third"));
+                cart.AddProduct(CreateRandomProduct());
+                cart.AddProduct(CreateRandomProduct());
+                cart.AddProduct(CreateRandomProduct());
             }
 
             if (withAProductMoreThanItsStock)
             {
-                var product = CreateProduct(name: "productWithInsufficientStock", stock: 10);
+                var product = CreateRandomProduct();
                 cart.AddProduct(product, product.Stock + 1);
 
             }

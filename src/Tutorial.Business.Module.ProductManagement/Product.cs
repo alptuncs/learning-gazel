@@ -77,6 +77,8 @@ namespace Tutorial.Business.Module.ProductManagement
 
             Available = false;
         }
+
+        void IProductService.RevisePrice(Money price) => RevisePrice(price);
     }
 
     public class Products : Query<Product>, IProductsService
@@ -94,16 +96,17 @@ namespace Tutorial.Business.Module.ProductManagement
 
         internal List<Product> ByPriceRange(MoneyRange priceRange) => By(t => t.Price >= priceRange.Start && t.Price <= priceRange.End);
 
-        IProductInfo IProductsService.GetProduct(Product product) =>
-            SingleById(product.Id);
 
-        List<IProductInfo> IProductsService.GetProductsWithPositiveStock() =>
+        IProductInfo IProductsService.GetProduct(int productId) =>
+            SingleById(productId);
+
+        List<IProductInfo> IProductsService.ProductsWithPositiveStock() =>
             ByStock().Cast<IProductInfo>().ToList();
 
-        List<IProductInfo> IProductsService.GetProductsWithinPriceRange(MoneyRange range) =>
-            ByPriceRange(range).Cast<IProductInfo>().ToList();
-
-        List<IProductInfo> IProductsService.GetProductsWithName(string name) =>
+        List<IProductInfo> IProductsService.ProductsWithName(string name) =>
             ByName(name).Cast<IProductInfo>().ToList();
+
+        List<IProductInfo> IProductsService.ProductsWithinPriceRange(MoneyRange range) =>
+            ByPriceRange(range).Cast<IProductInfo>().ToList();
     }
 }

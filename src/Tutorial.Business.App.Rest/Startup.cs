@@ -16,7 +16,6 @@ namespace Tutorial.Business.App.Rest
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvcCore().AddApiExplorer();
-
             services.AddGazelApiApplication(configuration,
                 serviceClient: c => c.Routine(ServiceUrl.Localhost(5000)),
                 restApi: c => c.Standard(),
@@ -24,13 +23,13 @@ namespace Tutorial.Business.App.Rest
             );
             services.AddSwaggerGen(config =>
             {
-                config.CustomSchemaIds(x => x.FullName);
-                config.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+                config.CustomSchemaIds(s => s.FullName);
             });
         }
 
         public void Configure(IApplicationBuilder app)
         {
+            app.UseDeveloperExceptionPage();
             app.UseSwagger();
             app.UseSwaggerUI();
             app.UseGazel();

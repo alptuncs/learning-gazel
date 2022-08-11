@@ -9,9 +9,9 @@
 
     public interface IPurchaseRecordsService
     {
-        IPurchaseRecordInfo GetRecordInfo(PurchaseRecord purchaseRecord);
-        IPurchaseRecordInfo GetPurchaseRecordsWithCart(Cart cart);
-        List<IPurchaseRecordInfo> GetPurchaseRecordsWithinTotalCostRange(int lowerBound, int upperBound);
-        List<IPurchaseRecordInfo> GetPurchaseRecordsWithingDateTimeRange(DateTime startDate, DateTime endDate);
+        IPurchaseRecordInfo RecordInfo(PurchaseRecord purchaseRecord);
+        IPurchaseRecordInfo PurchaseRecordsWithCart(Cart cart);
+        List<IPurchaseRecordInfo> PurchaseRecordsWithinTotalCostRange(int lowerBound, int upperBound);
+        List<IPurchaseRecordInfo> PurchaseRecordsWithingDateTimeRange(DateTime startDate, DateTime endDate);
     }
 }

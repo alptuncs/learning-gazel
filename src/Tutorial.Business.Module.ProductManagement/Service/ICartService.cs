@@ -19,8 +19,8 @@
 
     public interface ICartsService
     {
-        ICartInfo GetCart(Cart cart);
-        List<ICartInfo> GetNonEmptyCarts();
-        ICartInfo GetCartWithName(string name);
+        ICartInfo GetCart(int cartId);
+        List<ICartInfo> NonEmptyCarts();
+        ICartInfo CartWithName(string name);
     }
 }

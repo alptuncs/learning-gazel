@@ -27,6 +27,7 @@ namespace Tutorial.Business.App.Service
 
         public void Configure(IApplicationBuilder app)
         {
+            app.UseRoutineInDevelopmentMode();
             app.UseGazel();
         }
     }

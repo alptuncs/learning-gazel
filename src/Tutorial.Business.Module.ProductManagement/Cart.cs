@@ -99,8 +99,8 @@ namespace Tutorial.Business.Module.ProductManagement
         internal Cart SingleByUserName(string userName) => SingleBy(t => t.UserName == userName);
         internal List<Cart> NotEmpty() => By(t => t.TotalCost > 0);
 
-        ICartInfo ICartsService.GetCart(Cart cart) => SingleById(cart.Id);
-        ICartInfo ICartsService.GetCartWithName(string name) => SingleByUserName(name);
-        List<ICartInfo> ICartsService.GetNonEmptyCarts() => NotEmpty().Cast<ICartInfo>().ToList();
+        ICartInfo ICartsService.GetCart(int cartId) => SingleById(cartId);
+        ICartInfo ICartsService.CartWithName(string name) => SingleByUserName(name);
+        List<ICartInfo> ICartsService.NonEmptyCarts() => NotEmpty().Cast<ICartInfo>().ToList();
     }
 }

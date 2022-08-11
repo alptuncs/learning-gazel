@@ -1,4 +1,6 @@
-﻿namespace Tutorial.Business.Module.ProductManagement.Service
+﻿using Gazel.DataAccess;
+
+namespace Tutorial.Business.Module.ProductManagement.Service
 {
     public interface IProductInfo
     {
@@ -10,16 +12,18 @@
 
     public interface IProductService
     {
-        Product RevisePrice(Money price = default);
+        void RevisePrice(Money price);
         void MakeUnavailable();
     }
 
-    public interface IProductsService
+    public interface IProductsService : IQuery
     {
-        IProductInfo GetProduct(Product product);
-        List<IProductInfo> GetProductsWithPositiveStock();
-        List<IProductInfo> GetProductsWithName(string name);
-        List<IProductInfo> GetProductsWithinPriceRange(MoneyRange range);
+        // GET /products/{id}
+        IProductInfo GetProduct(int productId);
+        // GET /product/ProductsWithPositiveStock
+        List<IProductInfo> ProductsWithPositiveStock();
+        List<IProductInfo> ProductsWithName(string name);
+        List<IProductInfo> ProductsWithinPriceRange(MoneyRange range);
     }
 
     public interface IProductManagerService

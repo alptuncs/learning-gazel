@@ -18,14 +18,14 @@ namespace Tutorial.Business.App.Rest
                 restApi: c => c.Standard(templateOptions: t =>
                 {
                     t.Routes.Clear();
-                    t.Routes.Add(
-                        new(@"ICartInfo ICartService[.]GetCartWithName\(String name\)", (o, g) => new()
-                        {
-                            HttpMethod = Get,
-                            Template = $"/carts/{{name}}",
-                            Parameter = new("name", o.Parameters[0])
-                        })
-                    );
+                    //t.Routes.Add(
+                    //    new(@"ICartInfo ICartService[.]GetCartWithName\(String name\)", (o, g) => new()
+                    //    {
+                    //        HttpMethod = Get,
+                    //        Template = $"/carts/{{name}}",
+                    //        Parameter = new("name", o.Parameters[0])
+                    //    })
+                    //);
                     t.Routes.AddStandardRoutes();
                 }),
                 logging: c => c.Log4Net(Gazel.Logging.LogLevel.Debug, l => l.DefaultConsoleAppenders())

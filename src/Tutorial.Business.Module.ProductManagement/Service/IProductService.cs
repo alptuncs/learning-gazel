@@ -10,6 +10,12 @@ namespace Tutorial.Business.Module.ProductManagement.Service
         int Stock { get; }
     }
 
+    public interface IGenericInfo
+    {
+        int Id { get; }
+        string Name { get; }
+    }
+
     public interface IProductService
     {
         void Update(string name = default);

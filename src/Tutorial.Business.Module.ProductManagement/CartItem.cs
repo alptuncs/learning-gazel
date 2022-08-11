@@ -1,9 +1,10 @@
 ﻿using Gazel;
 using Gazel.DataAccess;
+using Tutorial.Business.Module.ProductManagement.Service;
 
 namespace Tutorial.Business.Module.ProductManagement
 {
-    public class CartItem
+    public class CartItem : ICartItemInfo, IGenericInfo
     {
         private IRepository<CartItem> repository;
 
@@ -19,6 +20,10 @@ namespace Tutorial.Business.Module.ProductManagement
         public virtual Product Product { get; protected set; }
 
         public virtual Money Price => Amount * Product.Price;
+
+        IGenericInfo ICartItemInfo.Product => Product;
+
+        string IGenericInfo.Name => Product.Name;
 
         protected internal virtual CartItem With(Cart cart, Product product)
         {

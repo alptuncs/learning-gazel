@@ -8,6 +8,22 @@
         bool PurchaseComplete { get; }
     }
 
+    public interface ICartDetail
+    {
+        int Id { get; }
+        string UserName { get; }
+        Money TotalCost { get; }
+        bool PurchaseComplete { get; }
+        List<ICartItemInfo> Items { get; }
+    }
+
+    public interface ICartItemInfo
+    {
+        int Id { get; }
+        int Amount { get; }
+        IGenericInfo Product { get; }
+    }
+
     public interface ICartService
     {
         void AddProduct(Product product, int amount);
@@ -19,13 +35,12 @@
 
     public interface ICartsService
     {
-        ICartInfo GetCart(int cartId);
-        List<ICartInfo> GetCarts();
-        ICartInfo GetCartWithName(string name);
+        ICartDetail GetCart(int cartId);
+        List<ICartInfo> GetCarts(string userName);
     }
 
     public interface ICartManagerService
     {
-        ICartInfo CreateCart(string userName);
+        ICartDetail CreateCart(string userName);
     }
 }

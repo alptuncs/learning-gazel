@@ -4,7 +4,7 @@ using Tutorial.Business.Module.ProductManagement.Service;
 
 namespace Tutorial.Business.Module.ProductManagement
 {
-    public class Cart : ICartInfo, ICartService
+    public class Cart : ICartInfo, ICartService, ICartDetail, IGenericInfo
     {
         private readonly IRepository<Cart> repository;
         private readonly IModuleContext context;
@@ -21,6 +21,10 @@ namespace Tutorial.Business.Module.ProductManagement
         public virtual string UserName { get; protected set; }
         public virtual Money TotalCost { get; protected set; }
         public virtual bool PurchaseComplete { get; protected set; }
+
+        List<ICartItemInfo> ICartDetail.Items => GetCartItems().Cast<ICartItemInfo>().ToList();
+
+        string IGenericInfo.Name => UserName;
 
         protected internal virtual Cart With(string userName, bool purchaseComplete = false)
         {
@@ -97,10 +101,12 @@ namespace Tutorial.Business.Module.ProductManagement
         public Carts(IModuleContext context) : base(context) { }
 
         internal Cart SingleByUserName(string userName) => SingleBy(t => t.UserName == userName);
-        internal List<Cart> NotEmpty() => By(t => t.TotalCost > 0);
+        internal List<Cart> NotEmpty() => By(t => t.TotalCost.Value > 0);
+        private List<Cart> ByUserName(string userName) => By(p => p.UserName == userName);
 
-        ICartInfo ICartsService.GetCart(int cartId) => SingleById(cartId);
-        ICartInfo ICartsService.GetCartWithName(string name) => SingleByUserName(name);
-        List<ICartInfo> ICartsService.GetCarts() => NotEmpty().Cast<ICartInfo>().ToList();
+
+        ICartDetail ICartsService.GetCart(int cartId) => SingleById(cartId);
+        List<ICartInfo> ICartsService.GetCarts(string userName) => ByUserName(userName).Cast<ICartInfo>().ToList();
     }
 }
+

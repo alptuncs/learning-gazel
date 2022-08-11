@@ -25,7 +25,7 @@ namespace Tutorial.Business.Module.ProductManagement
         IProductInfo IProductManagerService.CreateProduct(string name, Money price, int stock) =>
             CreateProduct(name, price, stock);
 
-        ICartInfo ICartManagerService.CreateCart(string userName) =>
+        ICartDetail ICartManagerService.CreateCart(string userName) =>
             CreateCart(userName);
     }
 }

@@ -19,7 +19,7 @@ namespace Tutorial.Business.App.Service
             services.AddGazelServiceApplication(cfg,
                 database: c => c.Sqlite("gazel.tutorial.db"),
                 service: c => c.Routine("http://localhost:5000/service"),
-                logging: c => c.Log4Net(Gazel.Logging.LogLevel.Info, l => l.DefaultConsoleAppenders()),
+                logging: c => c.Log4Net(Gazel.Logging.LogLevel.Debug, l => l.DefaultConsoleAppenders()),
                 authentication: c => c.AllowAnonymous(),
                 authorization: c => c.AllowAll()
             );

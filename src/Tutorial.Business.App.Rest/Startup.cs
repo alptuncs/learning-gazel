@@ -25,6 +25,7 @@ namespace Tutorial.Business.App.Rest
             services.AddSwaggerGen(config =>
             {
                 config.CustomSchemaIds(x => x.FullName);
+                config.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
             });
         }
 

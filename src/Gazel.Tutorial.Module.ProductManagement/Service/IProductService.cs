@@ -3,15 +3,15 @@
     public interface IProductInfo
     {
         int Id { get; }
-        string ProductName { get; }
-        float Price { get; }
+        string Name { get; }
+        Money Price { get; }
         int Stock { get; }
     }
 
     public interface IProductService
     {
-        Product UpdateProductInfo(string name = null, float price = default(float), int stock = default(int));
-        void RemoveProduct();
+        Product RevisePrice(Money price = default);
+        void MakeUnavailable();
     }
 
     public interface IProductsService
@@ -19,12 +19,12 @@
         IProductInfo GetProduct(Product product);
         List<IProductInfo> GetProductsWithPositiveStock();
         List<IProductInfo> GetProductsWithName(string name);
-        List<IProductInfo> GetProductsWithinPriceRange(float lowerBound, float upperBound);
+        List<IProductInfo> GetProductsWithinPriceRange(MoneyRange range);
     }
 
     public interface IProductManagerService
     {
-        Product CreateProduct(string name, float price, int stock);
+        Product CreateProduct(string name, Money price, int stock);
         Cart CreateCart(string userName);
     }
 }

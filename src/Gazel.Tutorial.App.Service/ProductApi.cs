@@ -1,11 +1,8 @@
 using Castle.MicroKernel;
 using Gazel.Configuration;
 using Gazel.Tutorial.Module.ProductManagement.Service;
-using Gazel.Tutorial.Module.ProductManagement;
 using Routine;
 using Routine.Engine.Configuration.ConventionBased;
-using Castle.MicroKernel;
-using Gazel.Configuration;
 
 namespace Gazel.Tutorial.App.Service
 {

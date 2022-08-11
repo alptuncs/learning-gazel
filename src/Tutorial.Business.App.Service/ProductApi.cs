@@ -1,10 +1,10 @@
 using Castle.MicroKernel;
 using Gazel.Configuration;
-using Gazel.Tutorial.Module.ProductManagement.Service;
 using Routine;
 using Routine.Engine.Configuration.ConventionBased;
+using Tutorial.Business.Module.ProductManagement.Service;
 
-namespace Gazel.Tutorial.App.Service
+namespace Tutorial.Business.App.Service
 {
     public class ProductAPi : ICodingStyleConfiguration
     {

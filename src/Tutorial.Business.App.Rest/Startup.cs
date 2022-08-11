@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Gazel.Web;
 
-namespace Gazel.Tutorial.App.Rest
+namespace Tutorial.Business.App.Rest
 {
     public class Startup
     {

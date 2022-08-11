@@ -1,7 +1,8 @@
-﻿using Gazel.DataAccess;
-using Gazel.Tutorial.Module.ProductManagement.Service;
+﻿using Gazel;
+using Gazel.DataAccess;
+using Tutorial.Business.Module.ProductManagement.Service;
 
-namespace Gazel.Tutorial.Module.ProductManagement
+namespace Tutorial.Business.Module.ProductManagement
 {
     public class PurchaseRecord : IPurchaseRecordInfo
     {
@@ -33,7 +34,7 @@ namespace Gazel.Tutorial.Module.ProductManagement
 
     public class PurchaseRecords : Query<PurchaseRecord>, IPurchaseRecordsService
     {
-        public PurchaseRecords(IModuleContext context) : base(context) { } 
+        public PurchaseRecords(IModuleContext context) : base(context) { }
 
         public PurchaseRecord ByDateTime(DateTime dateTime)
         {

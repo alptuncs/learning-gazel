@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
@@ -11,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Gazel.Tutorial.Module.ProductManagement\Gazel.Tutorial.Module.ProductManagement.csproj" />
+    <ProjectReference Include="..\Tutorial.Business.Module.ProductManagement\Tutorial.Business.Module.ProductManagement.csproj" />
   </ItemGroup>
 
 </Project>

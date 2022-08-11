@@ -1,4 +1,4 @@
-﻿namespace Gazel.Tutorial.Module.ProductManagement.Service
+﻿namespace Tutorial.Business.Module.ProductManagement.Service
 {
     public interface IProductInfo
     {

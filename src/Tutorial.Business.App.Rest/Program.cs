@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Gazel.Tutorial.App.Service
+namespace Tutorial.Business.App.Rest
 {
     public class Program
     {

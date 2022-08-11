@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace Gazel.Tutorial.Test.ProductManagement
+namespace Tutorial.Business.Test.ProductManagement
 {
     [TestFixture]
     public class DeleteProduct : ProductManagementTestBase

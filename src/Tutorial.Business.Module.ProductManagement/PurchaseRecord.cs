@@ -76,16 +76,16 @@ namespace Tutorial.Business.Module.ProductManagement
             return ByLowerBound(lowerBound).Intersect(ByUpperBound(upperBound)).ToList();
         }
 
-        IPurchaseRecordInfo IPurchaseRecordsService.RecordInfo(PurchaseRecord purchaseRecord) =>
-            SingleById(purchaseRecord.Id);
+        IPurchaseRecordInfo IPurchaseRecordsService.GetPurchaseRecord(int purchaseRecordId) =>
+            SingleById(purchaseRecordId);
 
-        IPurchaseRecordInfo IPurchaseRecordsService.PurchaseRecordsWithCart(Cart cart) =>
-            SingleByCart(cart);
+        List<IPurchaseRecordInfo> IPurchaseRecordsService.GetPurchaseRecords(Cart cart) =>
+            new() { SingleByCart(cart) };
 
-        List<IPurchaseRecordInfo> IPurchaseRecordsService.PurchaseRecordsWithinTotalCostRange(int lowerBound, int upperBound) =>
+        List<IPurchaseRecordInfo> IPurchaseRecordsService.GetPurchaseRecords(int lowerBound, int upperBound) =>
             By(lowerBound, upperBound).Cast<IPurchaseRecordInfo>().ToList();
 
-        List<IPurchaseRecordInfo> IPurchaseRecordsService.PurchaseRecordsWithingDateTimeRange(DateTime startDate, DateTime endDate) =>
+        List<IPurchaseRecordInfo> IPurchaseRecordsService.GetPurchaseRecords(DateTime startDate, DateTime endDate) =>
             By(startDate, endDate).Cast<IPurchaseRecordInfo>().ToList();
     }
 }

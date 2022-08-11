@@ -3,7 +3,7 @@ using Tutorial.Business.Module.ProductManagement.Service;
 
 namespace Tutorial.Business.Module.ProductManagement
 {
-    public class ProductManager : IProductManagerService
+    public class ProductManager : IProductManagerService, ICartManagerService
     {
         private readonly IModuleContext context;
 
@@ -21,5 +21,11 @@ namespace Tutorial.Business.Module.ProductManagement
         {
             return context.New<Cart>().With(userName);
         }
+
+        IProductInfo IProductManagerService.CreateProduct(string name, Money price, int stock) =>
+            CreateProduct(name, price, stock);
+
+        ICartInfo ICartManagerService.CreateCart(string userName) =>
+            CreateCart(userName);
     }
 }

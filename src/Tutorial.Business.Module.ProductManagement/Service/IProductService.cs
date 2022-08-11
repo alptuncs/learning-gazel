@@ -12,6 +12,7 @@ namespace Tutorial.Business.Module.ProductManagement.Service
 
     public interface IProductService
     {
+        void Update(string name = default);
         void RevisePrice(Money price);
         void MakeUnavailable();
     }
@@ -21,12 +22,11 @@ namespace Tutorial.Business.Module.ProductManagement.Service
         // GET /products/{id}
         IProductInfo GetProduct(int productId);
         // GET /product/ProductsWithPositiveStock
-        List<IProductInfo> GetProducts(bool positiveStock = false, string name = default, MoneyRange range = default);
+        List<IProductInfo> GetProducts(bool positiveStock = false, string name = default, MoneyRange? range = default);
     }
 
     public interface IProductManagerService
     {
-        Product CreateProduct(string name, Money price, int stock);
-        Cart CreateCart(string userName);
+        IProductInfo CreateProduct(string name, Money price, int stock);
     }
 }

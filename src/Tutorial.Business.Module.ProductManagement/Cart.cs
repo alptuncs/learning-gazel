@@ -100,7 +100,7 @@ namespace Tutorial.Business.Module.ProductManagement
         internal List<Cart> NotEmpty() => By(t => t.TotalCost > 0);
 
         ICartInfo ICartsService.GetCart(int cartId) => SingleById(cartId);
-        ICartInfo ICartsService.CartWithName(string name) => SingleByUserName(name);
-        List<ICartInfo> ICartsService.NonEmptyCarts() => NotEmpty().Cast<ICartInfo>().ToList();
+        ICartInfo ICartsService.GetCartWithName(string name) => SingleByUserName(name);
+        List<ICartInfo> ICartsService.GetCarts() => NotEmpty().Cast<ICartInfo>().ToList();
     }
 }

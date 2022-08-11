@@ -14,6 +14,7 @@ namespace Tutorial.Business.App.Service.ApiPackages
             codingStyle.AddTypes(v => v.ApiPackage("Cart", t => t
                 .Methods.Add(c => c.Proxy<ICartService>().TargetByParameter<Cart>())
                 .Methods.Add(c => c.Proxy<ICartsService>().TargetBySingleton(kernel))
+                .Methods.Add(c => c.Proxy<ICartManagerService>().TargetBySingleton(kernel))
             ));
         }
     }

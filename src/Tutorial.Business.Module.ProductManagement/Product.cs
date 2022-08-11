@@ -41,6 +41,8 @@ namespace Tutorial.Business.Module.ProductManagement
 
         public virtual void Update(string name = default)
         {
+            if (context.Query<Products>().AnyBy(name, true)) throw new Exception("Product with same name already exists");
+
             Name = name ?? Name;
         }
 
@@ -95,20 +97,19 @@ namespace Tutorial.Business.Module.ProductManagement
         internal List<Product> ByStock(int min, int max) => By(t => t.Stock > min && t.Stock <= max);
 
         internal List<Product> ByPriceRange(MoneyRange priceRange) => By(t => t.Price >= priceRange.Start && t.Price <= priceRange.End);
+        private List<Product> By(bool positiveStock = false, string name = default, MoneyRange? range = default) => By(p => true,
+                optionals: new[]
+                {
+                    When(positiveStock).Is(true).ThenAnd(p => p.Stock > 0),
+                    When(name).IsNotDefault().ThenAnd(p => p.Name == name),
+                    When(range).IsNotDefault().ThenAnd(p => p.Price >= range.Value.Start && p.Price <= range.Value.End)
+                });
 
 
         IProductInfo IProductsService.GetProduct(int productId) =>
             SingleById(productId);
 
-        List<IProductInfo> IProductsService.GetProducts(bool positiveStock = false, string name = default, MoneyRange range = default)
-        {
-            return By(p => true,
-                optionals: new[]
-                {
-                    When(positiveStock).Is(true).ThenAnd(p => p.Stock > 0),
-                    When(name).IsNotDefault().ThenAnd(p => p.Name == name),
-                    When(range).IsNotDefault().ThenAnd(p => p.Price >= range.Start && p.Price <= range.End)
-                }).Cast<IProductInfo>().ToList();
-        }
+        List<IProductInfo> IProductsService.GetProducts(bool positiveStock, string name, MoneyRange? range) =>
+            By(positiveStock, name, range).Cast<IProductInfo>().ToList();
     }
 }

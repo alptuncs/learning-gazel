@@ -20,7 +20,12 @@
     public interface ICartsService
     {
         ICartInfo GetCart(int cartId);
-        List<ICartInfo> NonEmptyCarts();
-        ICartInfo CartWithName(string name);
+        List<ICartInfo> GetCarts();
+        ICartInfo GetCartWithName(string name);
+    }
+
+    public interface ICartManagerService
+    {
+        ICartInfo CreateCart(string userName);
     }
 }

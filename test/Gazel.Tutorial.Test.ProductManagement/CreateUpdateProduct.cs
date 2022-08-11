@@ -24,7 +24,7 @@ namespace Gazel.Tutorial.Test.ProductManagement
         {
             BeginTest();
 
-            Assert.Throws<Exception>(() => CreateProduct(stock: -1));
+            Assert.Throws<Exception>(() => productManager.CreateProduct("test", 1.TRY(), -1));
         }
 
         [TestCase(0)]
@@ -33,7 +33,7 @@ namespace Gazel.Tutorial.Test.ProductManagement
         {
             BeginTest();
 
-            Assert.Throws<Exception>(() => CreateProduct(price: nonPositivePrice.TRY()));
+            Assert.Throws<Exception>(() => productManager.CreateProduct("test", nonPositivePrice.TRY(), 1));
         }
 
         [TestCase(null)]
@@ -42,7 +42,7 @@ namespace Gazel.Tutorial.Test.ProductManagement
         {
             BeginTest();
 
-            Assert.Throws<Exception>(() => CreateProduct(name: nullOrWhiteSpace));
+            Assert.Throws<Exception>(() => productManager.CreateProduct(name: nullOrWhiteSpace, 1.TRY(), 1));
         }
 
         [Test]
@@ -52,7 +52,7 @@ namespace Gazel.Tutorial.Test.ProductManagement
 
             BeginTest();
 
-            Assert.Throws<Exception>(() => CreateProduct(name: "availableProduct"));
+            Assert.Throws<Exception>(() => productManager.CreateProduct(name: "availableProduct", 1.TRY(), 1));
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace Gazel.Tutorial.Test.ProductManagement
         [Test]
         public void GIVEN_there_exists_a_product_within_carts__WHEN_its_price_is_revised_THEN_new_price_should_be_reflected_to_all_unpurchased_carts()
         {
-            var product = CreateRandomProduct();
+            var product = CreateProduct();
             var unpurchased = CreateCart(products: new[] { product });
             var purchased = CreateCart(purchased: true, products: new[] { product });
 

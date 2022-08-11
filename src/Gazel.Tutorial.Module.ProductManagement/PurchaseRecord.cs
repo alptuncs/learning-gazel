@@ -33,7 +33,7 @@ namespace Gazel.Tutorial.Module.ProductManagement
 
     public class PurchaseRecords : Query<PurchaseRecord>, IPurchaseRecordsService
     {
-        public PurchaseRecords(IModuleContext context) : base(context) { }
+        public PurchaseRecords(IModuleContext context) : base(context) { } 
 
         public PurchaseRecord ByDateTime(DateTime dateTime)
         {

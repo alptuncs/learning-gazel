@@ -1,13 +1,14 @@
-﻿using Gazel.Tutorial.Module.ProductManagement;
+﻿using Gazel;
 using Gazel.UnitTesting;
+using Tutorial.Business.Module.ProductManagement;
 
-namespace Gazel.Tutorial.Test.ProductManagement
+namespace Tutorial.Business.Test.ProductManagement
 {
     public abstract class ProductManagementTestBase : TestBase
     {
         static ProductManagementTestBase()
         {
-            Config.RootNamespace = "Gazel";
+            Config.RootNamespace = "Tutorial";
         }
 
         protected ProductManager productManager;
@@ -28,7 +29,7 @@ namespace Gazel.Tutorial.Test.ProductManagement
         {
             if (price.IsDefault()) price = 10.TRY();
 
-            if(name == default) name = Guid.NewGuid().ToString();
+            if (name == default) name = Guid.NewGuid().ToString();
 
             var product = Context.Get<ProductManager>().CreateProduct(name, price, stock);
 

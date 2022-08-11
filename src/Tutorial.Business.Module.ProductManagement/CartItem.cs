@@ -1,6 +1,7 @@
-﻿using Gazel.DataAccess;
+﻿using Gazel;
+using Gazel.DataAccess;
 
-namespace Gazel.Tutorial.Module.ProductManagement
+namespace Tutorial.Business.Module.ProductManagement
 {
     public class CartItem
     {

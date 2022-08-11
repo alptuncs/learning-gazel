@@ -1,7 +1,8 @@
-﻿using Gazel.DataAccess;
-using Gazel.Tutorial.Module.ProductManagement.Service;
+﻿using Gazel;
+using Gazel.DataAccess;
+using Tutorial.Business.Module.ProductManagement.Service;
 
-namespace Gazel.Tutorial.Module.ProductManagement
+namespace Tutorial.Business.Module.ProductManagement
 {
     public class PurchaseRecord : IPurchaseRecordInfo
     {

@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Gazel.Tutorial.Module.ProductManagement\Gazel.Tutorial.Module.ProductManagement.csproj" />
+    <ProjectReference Include="..\..\src\Tutorial.Business.Module.ProductManagement\Tutorial.Business.Module.ProductManagement.csproj" />
   </ItemGroup>
 
 </Project>

@@ -21,9 +21,7 @@ namespace Tutorial.Business.Module.ProductManagement.Service
         // GET /products/{id}
         IProductInfo GetProduct(int productId);
         // GET /product/ProductsWithPositiveStock
-        List<IProductInfo> ProductsWithPositiveStock();
-        List<IProductInfo> ProductsWithName(string name);
-        List<IProductInfo> ProductsWithinPriceRange(MoneyRange range);
+        List<IProductInfo> GetProducts(bool positiveStock = false, string name = default, MoneyRange range = default);
     }
 
     public interface IProductManagerService

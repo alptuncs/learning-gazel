@@ -100,21 +100,17 @@ namespace Tutorial.Business.Module.ProductManagement
 
         internal List<Product> ByStock(int min, int max) => By(t => t.Stock > min && t.Stock <= max);
 
-        internal List<Product> ByPriceRange(MoneyRange priceRange) => By(t => t.Price >= priceRange.Start && t.Price <= priceRange.End);
-        private List<Product> By(bool positiveStock = false, string name = default, MoneyRange? range = default) => By(p => true,
-                optionals: new[]
-                {
-                    When(positiveStock).Is(true).ThenAnd(p => p.Stock > 0),
-                    When(name).IsNotDefault().ThenAnd(p => p.Name == name),
-                    When(range).IsNotDefault().ThenAnd(p => p.Price >= range.Value.Start && p.Price <= range.Value.End)
-                });
+        internal List<Product> ByRange(MoneyRange priceRange) => By(t => t.Price >= priceRange.Start && t.Price <= priceRange.End);
 
         #region Service Mappings
         IProductInfo IProductsService.GetProduct(int productId) =>
             SingleById(productId);
-
-        List<IProductInfo> IProductsService.GetProducts(bool positiveStock, string name, MoneyRange? range) =>
-            By(positiveStock, name, range).Cast<IProductInfo>().ToList();
+        List<IProductInfo> IProductsService.GetProducts(bool positiveStock) =>
+            ByStock(0, int.MaxValue).Cast<IProductInfo>().ToList();
+        List<IProductInfo> IProductsService.GetProducts(MoneyRange range) =>
+            ByRange(range).Cast<IProductInfo>().ToList();
+        List<IProductInfo> IProductsService.GetProducts(string name) =>
+            ByName(name).Cast<IProductInfo>().ToList();
         #endregion
     }
 }

@@ -90,7 +90,7 @@ namespace Tutorial.Business.Module.ProductManagement
         }
 
         string IGenericInfo.Name => UserName;
-        List<ICartItemInfo> ICartDetail.Items => GetCartItems().Cast<ICartItemInfo>().ToList();
+        List<ICartItemInfo> ICartDetail.Products => GetCartItems().Cast<ICartItemInfo>().ToList();
         public virtual PurchaseRecord GetPurchaseRecord() => context.Query<PurchaseRecords>().SingleByCart(this);
     }
 

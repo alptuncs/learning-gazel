@@ -4,7 +4,7 @@
     {
         IPurchaseRecordInfo GetPurchaseRecord(int purchaseRecordId);
         List<IPurchaseRecordInfo> GetPurchaseRecords(Cart cart);
-        List<IPurchaseRecordInfo> GetPurchaseRecords(int lowerBound, int upperBound);
+        List<IPurchaseRecordInfo> GetPurchaseRecords(MoneyRange range);
         List<IPurchaseRecordInfo> GetPurchaseRecords(DateTime startDate, DateTime endDate);
     }
 }

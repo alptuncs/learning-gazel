@@ -3,7 +3,7 @@
     public interface IPurchaseRecordInfo
     {
         int Id { get; }
-        Cart Cart { get; }
+        ICartDetail Cart { get; }
         DateTime DateTime { get; }
     }
 }

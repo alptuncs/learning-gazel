@@ -6,6 +6,6 @@
         string UserName { get; }
         Money TotalCost { get; }
         bool PurchaseComplete { get; }
-        List<ICartItemInfo> Items { get; }
+        List<ICartItemInfo> Products { get; }
     }
 }

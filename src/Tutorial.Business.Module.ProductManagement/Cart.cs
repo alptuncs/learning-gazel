@@ -4,7 +4,7 @@ using Tutorial.Business.Module.ProductManagement.Service;
 
 namespace Tutorial.Business.Module.ProductManagement
 {
-    public class Cart : ICartInfo, ICartService, ICartDetail, IGenericInfo
+    public class Cart : IGenericInfo, ICartInfo, ICartDetail, ICartService
     {
         private readonly IRepository<Cart> repository;
         private readonly IModuleContext context;
@@ -21,10 +21,6 @@ namespace Tutorial.Business.Module.ProductManagement
         public virtual string UserName { get; protected set; }
         public virtual Money TotalCost { get; protected set; }
         public virtual bool PurchaseComplete { get; protected set; }
-
-        List<ICartItemInfo> ICartDetail.Items => GetCartItems().Cast<ICartItemInfo>().ToList();
-
-        string IGenericInfo.Name => UserName;
 
         protected internal virtual Cart With(string userName, bool purchaseComplete = false)
         {
@@ -93,6 +89,8 @@ namespace Tutorial.Business.Module.ProductManagement
             return context.New<PurchaseRecord>().With(this);
         }
 
+        string IGenericInfo.Name => UserName;
+        List<ICartItemInfo> ICartDetail.Items => GetCartItems().Cast<ICartItemInfo>().ToList();
         public virtual PurchaseRecord GetPurchaseRecord() => context.Query<PurchaseRecords>().SingleByCart(this);
     }
 

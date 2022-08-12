@@ -1,9 +1,8 @@
 ﻿namespace Tutorial.Business.Module.ProductManagement.Service
 {
-    public interface IPurchaseRecordInfo
+    public interface IGenericInfo
     {
         int Id { get; }
-        Cart Cart { get; }
-        DateTime DateTime { get; }
+        string Name { get; }
     }
 }

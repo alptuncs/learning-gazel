@@ -4,7 +4,7 @@ using Tutorial.Business.Module.ProductManagement.Service;
 
 namespace Tutorial.Business.Module.ProductManagement
 {
-    public class Product : IProductInfo, IProductService, IGenericInfo
+    public class Product : IGenericInfo, IProductInfo, IProductService
     {
         private readonly IRepository<Product> repository;
         private readonly IModuleContext context;

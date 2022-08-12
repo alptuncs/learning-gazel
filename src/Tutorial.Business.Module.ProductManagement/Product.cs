@@ -4,7 +4,7 @@ using Tutorial.Business.Module.ProductManagement.Service;
 
 namespace Tutorial.Business.Module.ProductManagement
 {
-    public class Product : IProductInfo, IProductService
+    public class Product : IGenericInfo, IProductInfo, IProductService
     {
         private readonly IRepository<Product> repository;
         private readonly IModuleContext context;
@@ -41,6 +41,8 @@ namespace Tutorial.Business.Module.ProductManagement
 
         public virtual void Update(string name = default)
         {
+            if (context.Query<Products>().AnyBy(name, true)) throw new Exception("Product with same name already exists");
+
             Name = name ?? Name;
         }
 
@@ -77,6 +79,12 @@ namespace Tutorial.Business.Module.ProductManagement
 
             Available = false;
         }
+
+        #region Service Mappings
+        void IProductService.RevisePrice(Money price) => RevisePrice(price);
+        void IProductService.MakeUnavailable() => MakeUnavailable();
+        void IProductService.Update(string name) => Update(name);
+        #endregion
     }
 
     public class Products : Query<Product>, IProductsService
@@ -90,20 +98,19 @@ namespace Tutorial.Business.Module.ProductManagement
 
         internal List<Product> ByName(string name) => By(t => t.Name == name);
 
-        internal List<Product> ByStock(int min = 0, int max = int.MaxValue) => By(t => t.Stock > min && t.Stock <= max);
+        internal List<Product> ByStock(int min, int max) => By(t => t.Stock > min && t.Stock <= max);
 
-        internal List<Product> ByPriceRange(MoneyRange priceRange) => By(t => t.Price >= priceRange.Start && t.Price <= priceRange.End);
+        internal List<Product> ByRange(MoneyRange priceRange) => By(t => t.Price >= priceRange.Start && t.Price <= priceRange.End);
 
-        IProductInfo IProductsService.GetProduct(Product product) =>
-            SingleById(product.Id);
-
-        List<IProductInfo> IProductsService.GetProductsWithPositiveStock() =>
-            ByStock().Cast<IProductInfo>().ToList();
-
-        List<IProductInfo> IProductsService.GetProductsWithinPriceRange(MoneyRange range) =>
-            ByPriceRange(range).Cast<IProductInfo>().ToList();
-
-        List<IProductInfo> IProductsService.GetProductsWithName(string name) =>
+        #region Service Mappings
+        IProductInfo IProductsService.GetProduct(int productId) =>
+            SingleById(productId);
+        List<IProductInfo> IProductsService.GetProducts(bool positiveStock) =>
+            ByStock(0, int.MaxValue).Cast<IProductInfo>().ToList();
+        List<IProductInfo> IProductsService.GetProducts(MoneyRange range) =>
+            ByRange(range).Cast<IProductInfo>().ToList();
+        List<IProductInfo> IProductsService.GetProducts(string name) =>
             ByName(name).Cast<IProductInfo>().ToList();
+        #endregion
     }
 }

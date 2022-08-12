@@ -1,9 +1,10 @@
 ﻿using Gazel;
 using Gazel.DataAccess;
+using Tutorial.Business.Module.ProductManagement.Service;
 
 namespace Tutorial.Business.Module.ProductManagement
 {
-    public class CartItem
+    public class CartItem : IGenericInfo, ICartItemInfo
     {
         private IRepository<CartItem> repository;
 
@@ -45,6 +46,11 @@ namespace Tutorial.Business.Module.ProductManagement
         {
             repository.Delete(this);
         }
+
+        #region Service Mappings
+        string IGenericInfo.Name => Product.Name;
+        IGenericInfo ICartItemInfo.Product => Product;
+        #endregion
     }
 
     public class CartItems : Query<CartItem>

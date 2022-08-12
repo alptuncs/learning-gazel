@@ -1,9 +1,6 @@
-using Gazel.Logging;
+using Gazel.RestApi;
 using Gazel.ServiceClient;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Gazel.Web;
+using static System.Net.Http.HttpMethod;
 
 namespace Tutorial.Business.App.Rest
 {
@@ -16,21 +13,32 @@ namespace Tutorial.Business.App.Rest
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvcCore().AddApiExplorer();
-
             services.AddGazelApiApplication(configuration,
                 serviceClient: c => c.Routine(ServiceUrl.Localhost(5000)),
-                restApi: c => c.Standard(),
-                logging: c => c.Log4Net(Gazel.Logging.LogLevel.Info, l => l.DefaultConsoleAppenders())
+                restApi: c => c.Standard(templateOptions: t =>
+                {
+                    t.Routes.Clear();
+                    //t.Routes.Add(
+                    //    new(@"ICartInfo ICartService[.]GetCartWithName\(String name\)", (o, g) => new()
+                    //    {
+                    //        HttpMethod = Get,
+                    //        Template = $"/carts/{{name}}",
+                    //        Parameter = new("name", o.Parameters[0])
+                    //    })
+                    //);
+                    t.Routes.AddStandardRoutes();
+                }),
+                logging: c => c.Log4Net(Gazel.Logging.LogLevel.Debug, l => l.DefaultConsoleAppenders())
             );
             services.AddSwaggerGen(config =>
             {
-                config.CustomSchemaIds(x => x.FullName);
-                config.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+                config.CustomSchemaIds(s => s.FullName.Replace('+', '.'));
             });
         }
 
         public void Configure(IApplicationBuilder app)
         {
+            app.UseDeveloperExceptionPage();
             app.UseSwagger();
             app.UseSwaggerUI();
             app.UseGazel();

@@ -10,7 +10,7 @@ namespace Tutorial.Business.App.Service.ApiPackages
     {
         public void Configure(ConventionBasedCodingStyle codingStyle, IKernel kernel)
         {
-            codingStyle.AddTypes(v => v.ApiPackage("Purchase", t => t
+            codingStyle.AddTypes(v => v.ApiPackage("PurchaseRecord", t => t
                 .Methods.Add(c => c.Proxy<IPurchaseRecordsService>().TargetBySingleton(kernel))
             ));
         }

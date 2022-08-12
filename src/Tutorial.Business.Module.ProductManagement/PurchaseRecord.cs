@@ -4,7 +4,7 @@ using Tutorial.Business.Module.ProductManagement.Service;
 
 namespace Tutorial.Business.Module.ProductManagement
 {
-    public class PurchaseRecord : IPurchaseRecordInfo
+    public class PurchaseRecord : IGenericInfo, IPurchaseRecordInfo
     {
         private readonly IRepository<PurchaseRecord> repository;
         private readonly ISystem system;
@@ -30,6 +30,11 @@ namespace Tutorial.Business.Module.ProductManagement
 
             return this;
         }
+
+        #region Service Mappings
+        string IGenericInfo.Name => Cart.UserName;
+        ICartDetail IPurchaseRecordInfo.Cart => Cart;
+        #endregion
     }
 
     public class PurchaseRecords : Query<PurchaseRecord>, IPurchaseRecordsService
@@ -61,31 +66,23 @@ namespace Tutorial.Business.Module.ProductManagement
             return SingleBy(t => t.Cart == cart);
         }
 
-        public List<PurchaseRecord> ByLowerBound(int lowerBound)
+        public List<PurchaseRecord> ByRange(MoneyRange range)
         {
-            return By(t => t.Cart.TotalCost > lowerBound);
+            return By(t => t.Cart.TotalCost >= range.Start && t.Cart.TotalCost <= range.End);
         }
 
-        public List<PurchaseRecord> ByUpperBound(int upperBound)
-        {
-            return By(t => t.Cart.TotalCost < upperBound);
-        }
+        #region ServiceMappings
+        IPurchaseRecordInfo IPurchaseRecordsService.GetPurchaseRecord(int purchaseRecordId) =>
+            SingleById(purchaseRecordId);
 
-        public List<PurchaseRecord> By(int lowerBound, int upperBound)
-        {
-            return ByLowerBound(lowerBound).Intersect(ByUpperBound(upperBound)).ToList();
-        }
+        List<IPurchaseRecordInfo> IPurchaseRecordsService.GetPurchaseRecords(Cart cart) =>
+            new() { SingleByCart(cart) };
 
-        IPurchaseRecordInfo IPurchaseRecordsService.GetRecordInfo(PurchaseRecord purchaseRecord) =>
-            SingleById(purchaseRecord.Id);
+        List<IPurchaseRecordInfo> IPurchaseRecordsService.GetPurchaseRecords(MoneyRange range) =>
+            ByRange(range).Cast<IPurchaseRecordInfo>().ToList();
 
-        IPurchaseRecordInfo IPurchaseRecordsService.GetPurchaseRecordsWithCart(Cart cart) =>
-            SingleByCart(cart);
-
-        List<IPurchaseRecordInfo> IPurchaseRecordsService.GetPurchaseRecordsWithinTotalCostRange(int lowerBound, int upperBound) =>
-            By(lowerBound, upperBound).Cast<IPurchaseRecordInfo>().ToList();
-
-        List<IPurchaseRecordInfo> IPurchaseRecordsService.GetPurchaseRecordsWithingDateTimeRange(DateTime startDate, DateTime endDate) =>
+        List<IPurchaseRecordInfo> IPurchaseRecordsService.GetPurchaseRecords(DateTime startDate, DateTime endDate) =>
             By(startDate, endDate).Cast<IPurchaseRecordInfo>().ToList();
+        #endregion
     }
 }

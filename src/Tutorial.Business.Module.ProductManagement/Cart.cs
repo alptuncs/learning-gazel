@@ -4,7 +4,7 @@ using Tutorial.Business.Module.ProductManagement.Service;
 
 namespace Tutorial.Business.Module.ProductManagement
 {
-    public class Cart : ICartInfo, ICartService
+    public class Cart : IGenericInfo, ICartInfo, ICartDetail, ICartService
     {
         private readonly IRepository<Cart> repository;
         private readonly IModuleContext context;
@@ -36,6 +36,7 @@ namespace Tutorial.Business.Module.ProductManagement
         }
 
         public virtual List<CartItem> GetCartItems() => context.Query<CartItems>().ByCart(this);
+        public virtual PurchaseRecord GetPurchaseRecord() => context.Query<PurchaseRecords>().SingleByCart(this);
 
         protected virtual void ValidateNotPurchased()
         {
@@ -89,7 +90,14 @@ namespace Tutorial.Business.Module.ProductManagement
             return context.New<PurchaseRecord>().With(this);
         }
 
-        public virtual PurchaseRecord GetPurchaseRecord() => context.Query<PurchaseRecords>().SingleByCart(this);
+        #region Service Mappings
+        string IGenericInfo.Name => UserName;
+        List<ICartItemInfo> ICartDetail.Products => GetCartItems().Cast<ICartItemInfo>().ToList();
+        void ICartService.AddProduct(Product product, int amount) => AddProduct(product, amount);
+        void ICartService.RemoveProduct(Product product) => RemoveProduct(product);
+        void ICartService.RemoveAllProducts() => RemoveAllProducts();
+        void ICartService.Purchase() => Purchase();
+        #endregion
     }
 
     public class Carts : Query<Cart>, ICartsService
@@ -97,10 +105,13 @@ namespace Tutorial.Business.Module.ProductManagement
         public Carts(IModuleContext context) : base(context) { }
 
         internal Cart SingleByUserName(string userName) => SingleBy(t => t.UserName == userName);
-        internal List<Cart> NotEmpty() => By(t => t.TotalCost > 0);
+        internal List<Cart> NotEmpty() => By(t => t.TotalCost.Value > 0);
+        private List<Cart> ByUserName(string userName) => By(p => p.UserName == userName);
 
-        ICartInfo ICartsService.GetCart(Cart cart) => SingleById(cart.Id);
-        ICartInfo ICartsService.GetCartWithName(string name) => SingleByUserName(name);
-        List<ICartInfo> ICartsService.GetNonEmptyCarts() => NotEmpty().Cast<ICartInfo>().ToList();
+        #region Service Mappings
+        ICartDetail ICartsService.GetCart(int cartId) => SingleById(cartId);
+        List<ICartInfo> ICartsService.GetCarts(string userName) => ByUserName(userName).Cast<ICartInfo>().ToList();
+        #endregion
     }
 }
+

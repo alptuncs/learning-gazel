@@ -80,7 +80,11 @@ namespace Tutorial.Business.Module.ProductManagement
             Available = false;
         }
 
+        #region Service Mappings
         void IProductService.RevisePrice(Money price) => RevisePrice(price);
+        void IProductService.MakeUnavailable() => MakeUnavailable();
+        void IProductService.Update(string name) => Update(name);
+        #endregion
     }
 
     public class Products : Query<Product>, IProductsService
@@ -105,11 +109,12 @@ namespace Tutorial.Business.Module.ProductManagement
                     When(range).IsNotDefault().ThenAnd(p => p.Price >= range.Value.Start && p.Price <= range.Value.End)
                 });
 
-
+        #region Service Mappings
         IProductInfo IProductsService.GetProduct(int productId) =>
             SingleById(productId);
 
         List<IProductInfo> IProductsService.GetProducts(bool positiveStock, string name, MoneyRange? range) =>
             By(positiveStock, name, range).Cast<IProductInfo>().ToList();
+        #endregion
     }
 }

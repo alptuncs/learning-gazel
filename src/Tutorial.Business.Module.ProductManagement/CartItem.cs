@@ -47,8 +47,10 @@ namespace Tutorial.Business.Module.ProductManagement
             repository.Delete(this);
         }
 
+        #region Service Mappings
         string IGenericInfo.Name => Product.Name;
         IGenericInfo ICartItemInfo.Product => Product;
+        #endregion
     }
 
     public class CartItems : Query<CartItem>

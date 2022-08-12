@@ -4,7 +4,7 @@ using Tutorial.Business.Module.ProductManagement.Service;
 
 namespace Tutorial.Business.Module.ProductManagement
 {
-    public class PurchaseRecord : IPurchaseRecordInfo
+    public class PurchaseRecord : IGenericInfo, IPurchaseRecordInfo
     {
         private readonly IRepository<PurchaseRecord> repository;
         private readonly ISystem system;
@@ -31,7 +31,10 @@ namespace Tutorial.Business.Module.ProductManagement
             return this;
         }
 
+        #region Service Mappings
+        string IGenericInfo.Name => Cart.UserName;
         ICartDetail IPurchaseRecordInfo.Cart => Cart;
+        #endregion
     }
 
     public class PurchaseRecords : Query<PurchaseRecord>, IPurchaseRecordsService
@@ -68,6 +71,7 @@ namespace Tutorial.Business.Module.ProductManagement
             return By(t => t.Cart.TotalCost >= range.Start && t.Cart.TotalCost <= range.End);
         }
 
+        #region ServiceMappings
         IPurchaseRecordInfo IPurchaseRecordsService.GetPurchaseRecord(int purchaseRecordId) =>
             SingleById(purchaseRecordId);
 
@@ -79,5 +83,6 @@ namespace Tutorial.Business.Module.ProductManagement
 
         List<IPurchaseRecordInfo> IPurchaseRecordsService.GetPurchaseRecords(DateTime startDate, DateTime endDate) =>
             By(startDate, endDate).Cast<IPurchaseRecordInfo>().ToList();
+        #endregion
     }
 }

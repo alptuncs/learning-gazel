@@ -5,6 +5,6 @@
         void AddProduct(Product product, int amount);
         void RemoveProduct(Product product);
         void RemoveAllProducts();
-        PurchaseRecord Purchase();
+        void Purchase();
     }
 }
